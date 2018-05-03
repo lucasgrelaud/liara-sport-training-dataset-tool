@@ -1,2 +1,4 @@
-.idea
+.idea/
 venv/
+input-data/
+output-data/
