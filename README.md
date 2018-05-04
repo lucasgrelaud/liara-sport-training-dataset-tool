@@ -17,6 +17,7 @@
 2. Get in the created directory : ```$ cd hexoskin```
 3. Activate the virtualenv : ```$ source bin/activate```
 4. Install the dependencies : ```$ pip install -r requirement.txt```
+5. Let's enjoy :D
 
 
 ## Usage

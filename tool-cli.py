@@ -3,6 +3,7 @@ import sys
 import getopt
 import os
 import hexoskin
+from hexoskin.standardize.Accelerometer import Accelerometer
 
 
 def main(argv):
@@ -36,8 +37,9 @@ def main(argv):
         os.mkdir(output_dir)
         print('Create the directory : "' + output_dir + '".')
 
-    print('Input file is "' + input_dir + '"')
+    print('\nInput file is "' + input_dir + '"')
     print('Output file is "' + output_dir + '"')
+    standardize_data(input_dir,output_dir)
     exit()
 
 
@@ -50,6 +52,11 @@ def print_help():
           "\t     DEFAULT_DIR : ./output-data"
           )
     return
+
+
+def standardize_data(input_dir, output_dir):
+    accelerometer = Accelerometer(input_dir,output_dir)
+
 
 
 if __name__ == "__main__":
