@@ -2,6 +2,8 @@
 import sys
 import getopt
 import os
+import hexoskin
+
 
 def main(argv):
     # Define the default directories
@@ -22,6 +24,10 @@ def main(argv):
     except getopt.GetoptError:
         print_help()
 
+    # Get the absolute path of each dir
+    input_dir = os.path.abspath(input_dir)
+    output_dir = os.path.abspath(output_dir)
+
     # Create the directories if needed
     if not os.path.isdir(input_dir):
         os.mkdir(input_dir)
@@ -38,7 +44,7 @@ def main(argv):
 def print_help():
     print(
           "usage: tool-cli.py [-i <path> ] [-o <path>]\n" +
-          "\t-i : Input directory where the tool will find the raw data of the Hexoskin\n" +
+          "\t-i : Input directory where the tool will find the raw data of the Hexoskin device\n" +
           "\t     DEFAULT_DIR : ./input-data\n" +
           "\t-o : Output directory where the tool will export the data\n" +
           "\t     DEFAULT_DIR : ./output-data"

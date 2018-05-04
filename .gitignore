@@ -2,3 +2,6 @@
 venv/
 input-data/
 output-data/
+
+
+*.py[cod]
