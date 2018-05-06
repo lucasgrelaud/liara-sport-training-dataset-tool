@@ -1,13 +1,16 @@
+import os
+import csv
+from termcolor import colored
 from hexoskin.standardize.Accelerometer.AccelerometerAxis import AccelerometerAxis
 from hexoskin.standardize.Accelerometer.exception.WavImportException import WavImportException
-from termcolor import colored
 
 
 class Accelerometer:
     """"Class which represent the accelerometer"""
 
     def __init__(self, input_path, output_path):
-        self.dir_path = input_path
+        self.input_path = input_path
+        self.output_path = output_path + "/standardize"
 
         # Import each axis and set the related attributes
         try:
@@ -31,11 +34,19 @@ class Accelerometer:
             print(colored('\nWARNING : The accelerometer data are partials', 'yellow'))
         else:
             print(colored('\nThe accelerometer data are fully imported', 'green'))
-            self.z_axis.print_result()
-
-        print(self.x_axis.data)
 
     def is_fully_initialized(self):
         return self.x_axis is not None \
                and self.y_axis is not None \
                and self.z_axis is not None
+
+    def export_csv(self):
+        # Create the directory if needed
+        if not os.path.isdir(self.output_path):
+            os.mkdir(self.output_path)
+            print('Create the output directory : "' + self.output_path + '".')
+
+        with open(self.output_path + '/accelerometer.csv', 'w', newline='') as csvfile:
+            spamwriter = csv.writer(csvfile, dialect='excel')
+            spamwriter.writerow(['Spam'] * 5 + ['Baked Beans'])
+            spamwriter.writerow(['Spam', 'Lovely Spam', 'Wonderful Spam'])

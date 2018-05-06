@@ -55,7 +55,8 @@ def print_help():
 
 
 def standardize_data(input_dir, output_dir):
-    accelerometer = Accelerometer(input_dir,output_dir)
+    accelerometer = Accelerometer(input_dir, output_dir)
+    accelerometer.export_csv()
 
 
 

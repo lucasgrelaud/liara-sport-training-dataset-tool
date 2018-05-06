@@ -1,5 +1,5 @@
-from datetime import timedelta
 from datetime import datetime
+from datetime import timedelta
 from scipy.io import wavfile
 from hexoskin.standardize.Accelerometer.exception.WavImportException import WavImportException
 
@@ -16,6 +16,7 @@ class AccelerometerAxis:
             raise WavImportException('')
 
         self.axis = axis
+        self.nrecords = self.raw_data.size
         self.time = self.raw_data.size / self.rate
         self.data = {}
         self.add_timecode()
