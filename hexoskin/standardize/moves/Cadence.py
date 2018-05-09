@@ -6,10 +6,10 @@ from datetime import timedelta
 from scipy.io import wavfile
 from .exception.WavImportException import WavImportException
 
-class Activity:
+class Cadence:
     """Class which represent the user activity (accelerometer intensity vector)"""
     def __init__(self, input_path, output_path):
-        self.file_path = input_path + '/activity.wav'
+        self.file_path = input_path + '/cadence.wav'
         self.output_path = output_path
 
         # Try to import the data from a specific WAV file
@@ -57,8 +57,8 @@ class Activity:
             print('Create the output directory : "' + self.output_path + '".')
 
         # Generate the CSV
-        with open(self.output_path + '/activity.csv', 'w', newline='') as csvfile:
+        with open(self.output_path + '/cadence.csv', 'w', newline='') as csvfile:
             spamwriter = csv.writer(csvfile, dialect='excel')
-            spamwriter.writerow(['TimeCode', 'Activity(G/256)'])
+            spamwriter.writerow(['TimeCode', 'Cadence(Step/min)'])
             for timecode in self.data.keys():
                 spamwriter.writerow([timecode, self.data[timecode]])
