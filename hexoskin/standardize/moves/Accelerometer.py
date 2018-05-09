@@ -51,7 +51,7 @@ class Accelerometer:
         y_data = self.__y_axis.get_data()
         z_data = self.__z_axis.get_data()
         with open(self.__output_path + '/accelerometer.csv', 'w', newline='') as csvfile:
-            spamwriter = csv.writer(csvfile, dialect='excel')
-            spamwriter.writerow(['TimeCode', 'X(G/256)', 'Y(G/256)', 'Z(G/256)'])
+            filewriter = csv.writer(csvfile, dialect='excel')
+            filewriter.writerow(['TimeCode', 'X(G/256)', 'Y(G/256)', 'Z(G/256)'])
             for timecode in x_data.keys():
-                spamwriter.writerow([timecode, x_data[timecode], y_data[timecode], z_data[timecode]])
+                filewriter.writerow([timecode, x_data[timecode], y_data[timecode], z_data[timecode]])

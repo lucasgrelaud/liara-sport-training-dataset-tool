@@ -65,7 +65,7 @@ class Cadence:
 
         # Generate the CSV
         with open(self.__output_path + '/cadence.csv', 'w', newline='') as csvfile:
-            spamwriter = csv.writer(csvfile, dialect='excel')
-            spamwriter.writerow(['TimeCode', 'Cadence(Step/min)'])
+            filewriter = csv.writer(csvfile, dialect='excel')
+            filewriter.writerow(['TimeCode', 'Cadence(Step/min)'])
             for timecode in self.__data.keys():
-                spamwriter.writerow([timecode, self.__data[timecode]])
+                filewriter.writerow([timecode, self.__data[timecode]])

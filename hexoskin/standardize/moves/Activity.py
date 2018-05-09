@@ -64,7 +64,7 @@ class Activity:
 
         # Generate the CSV
         with open(self.__output_path + '/activity.csv', 'w', newline='') as csvfile:
-            spamwriter = csv.writer(csvfile, dialect='excel')
-            spamwriter.writerow(['TimeCode', 'Activity(G/256)'])
+            filewriter = csv.writer(csvfile, dialect='excel')
+            filewriter.writerow(['TimeCode', 'Activity(G/256)'])
             for timecode in self.__data.keys():
-                spamwriter.writerow([timecode, self.__data[timecode]])
+                filewriter.writerow([timecode, self.__data[timecode]])
