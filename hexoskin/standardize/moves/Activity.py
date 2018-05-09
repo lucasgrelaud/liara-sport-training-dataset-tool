@@ -9,56 +9,62 @@ from .exception.WavImportException import WavImportException
 class Activity:
     """Class which represent the user activity (accelerometer intensity vector)"""
     def __init__(self, input_path, output_path):
-        self.file_path = input_path + '/activity.wav'
-        self.output_path = output_path
+        self.__file_path = input_path + '/activity.wav'
+        self.__output_path = output_path
 
         # Try to import the data from a specific WAV file
         try:
-            self.rate, self.raw_data = wavfile.read(self.file_path)
+            self.__rate, self.__raw_data = wavfile.read(self.__file_path)
         except FileNotFoundError:
-            raise WavImportException('\nERROR : The file "' + self.file_path + '" can\'t be found.')
+            raise WavImportException('\nERROR : The file "' + self.__file_path + '" can\'t be found.')
         except ValueError:
-            raise WavImportException('The file "' + self.file_path + '" has been corrupted and cannot be read.')
+            raise WavImportException('The file "' + self.__file_path + '" has been corrupted and cannot be read.')
 
         print(colored('The activity data are fully imported.', 'green'))
 
-        self.nrecords = self.raw_data.size
-        self.time = self.raw_data.size / self.rate
-        self.data = {}
-        self.add_timecode()
+        self.__nrecords = self.__raw_data.size
+        self.__time = self.__raw_data.size / self.__rate
+        self.__data = {}
+        self.__add_timecode()
+
+    def get_time(self):
+        return self.__time
+
+    def get_nrecords(self):
+        return self.__nrecords
 
     def get_data(self):
-        return self.data
+        return self.__data
 
     def print_result(self):
         """
             Print the metadata of the axis record.
         """
-        print('Sample rate: ', self.rate)
-        print('Records: ', self.raw_data.size)
-        print('Duration (seconds): ', self.time)
+        print('Sample rate: ', self.__rate)
+        print('Records: ', self.__raw_data.size)
+        print('Duration (seconds): ', self.__time)
 
-    def add_timecode(self):
+    def __add_timecode(self):
         """
             Generate the records timecode based on the sample rate and
             the recording duration
         """
         timecode = datetime(1970, 1, 1, 0, 0, 0, 0)
-        delta = timedelta(microseconds=(1 / self.rate) * 1000000)
+        delta = timedelta(microseconds=(1 / self.__rate) * 1000000)
 
-        for record in self.raw_data:
-            self.data[timecode.strftime('%H:%M:%S:%f')] = record
+        for record in self.__raw_data:
+            self.__data[timecode.strftime('%H:%M:%S:%f')] = record
             timecode = timecode + delta
 
     def export_csv(self):
         # Create the directory if needed
-        if not os.path.isdir(self.output_path):
-            os.mkdir(self.output_path)
-            print('Create the output directory : "' + self.output_path + '".')
+        if not os.path.isdir(self.__output_path):
+            os.mkdir(self.__output_path)
+            print('Create the output directory : "' + self.__output_path + '".')
 
         # Generate the CSV
-        with open(self.output_path + '/activity.csv', 'w', newline='') as csvfile:
+        with open(self.__output_path + '/activity.csv', 'w', newline='') as csvfile:
             spamwriter = csv.writer(csvfile, dialect='excel')
             spamwriter.writerow(['TimeCode', 'Activity(G/256)'])
-            for timecode in self.data.keys():
-                spamwriter.writerow([timecode, self.data[timecode]])
+            for timecode in self.__data.keys():
+                spamwriter.writerow([timecode, self.__data[timecode]])
