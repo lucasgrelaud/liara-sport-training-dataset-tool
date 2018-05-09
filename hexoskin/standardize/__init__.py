@@ -1,1 +1,1 @@
-from . import Accelerometer
+from .moves import *

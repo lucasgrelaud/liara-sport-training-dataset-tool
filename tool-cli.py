@@ -2,8 +2,7 @@
 import sys
 import getopt
 import os
-import hexoskin
-from hexoskin.standardize.Accelerometer import Accelerometer
+from hexoskin.standardize.moves import Accelerometer
 
 
 def main(argv):

@@ -2,6 +2,10 @@
 venv/
 input-data/
 output-data/
-
+Lib/
+Scripts
+tcl/
+Include/
+pip-selfcheck.json
 
 *.py[cod]

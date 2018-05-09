@@ -1,8 +1,8 @@
 import os
 import csv
 from termcolor import colored
-from hexoskin.standardize.Accelerometer.AccelerometerAxis import AccelerometerAxis
-from hexoskin.standardize.Accelerometer.exception.WavImportException import WavImportException
+from .AccelerometerAxis import AccelerometerAxis
+from .exception import WavImportException
 
 
 class Accelerometer:
@@ -46,7 +46,12 @@ class Accelerometer:
             os.mkdir(self.output_path)
             print('Create the output directory : "' + self.output_path + '".')
 
+        # Generate the CSV
+        x_data = self.x_axis.get_data()
+        y_data = self.y_axis.get_data()
+        z_data = self.z_axis.get_data()
         with open(self.output_path + '/accelerometer.csv', 'w', newline='') as csvfile:
             spamwriter = csv.writer(csvfile, dialect='excel')
-            spamwriter.writerow(['Spam'] * 5 + ['Baked Beans'])
-            spamwriter.writerow(['Spam', 'Lovely Spam', 'Wonderful Spam'])
+            spamwriter.writerow(['TimeCode', 'X', 'Y', 'Z'])
+            for timecode in x_data.keys():
+                spamwriter.writerow([timecode, x_data[timecode], y_data[timecode], z_data[timecode]])
