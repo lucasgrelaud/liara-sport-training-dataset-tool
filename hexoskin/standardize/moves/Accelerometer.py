@@ -10,7 +10,7 @@ class Accelerometer:
 
     def __init__(self, input_path, output_path):
         self.input_path = input_path
-        self.output_path = output_path + "/standardize"
+        self.output_path = output_path
 
         # Import each axis and set the related attributes
         try:
@@ -33,7 +33,7 @@ class Accelerometer:
         if not self.is_fully_initialized():
             print(colored('\nWARNING : The accelerometer data are partials', 'yellow'))
         else:
-            print(colored('\nThe accelerometer data are fully imported', 'green'))
+            print(colored('The accelerometer data are fully imported.', 'green'))
 
     def is_fully_initialized(self):
         return self.x_axis is not None \

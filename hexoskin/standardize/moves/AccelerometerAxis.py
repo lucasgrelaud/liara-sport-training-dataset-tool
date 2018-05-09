@@ -8,6 +8,7 @@ class AccelerometerAxis:
     """Class which represent an axis of the accelerometer"""
 
     def __init__(self, axis, file_path):
+        # Try to import the data from a specific WAV file
         try:
             self.rate, self.raw_data = wavfile.read(file_path)
         except FileNotFoundError:
@@ -39,7 +40,7 @@ class AccelerometerAxis:
             the recording duration
         """
         timecode = datetime(1970, 1, 1, 0, 0, 0, 0)
-        delta =  timedelta(microseconds=(1 / self.rate) * 1000000)
+        delta = timedelta(microseconds=(1 / self.rate) * 1000000)
 
         for record in self.raw_data:
             self.data[timecode.strftime('%H:%M:%S:%f')] = record

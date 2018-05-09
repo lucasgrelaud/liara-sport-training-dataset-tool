@@ -2,7 +2,7 @@
 import sys
 import getopt
 import os
-from hexoskin.standardize.moves import Accelerometer
+from hexoskin.standardize.moves import Moves
 
 
 def main(argv):
@@ -37,7 +37,7 @@ def main(argv):
         print('Create the directory : "' + output_dir + '".')
 
     print('\nInput file is "' + input_dir + '"')
-    print('Output file is "' + output_dir + '"')
+    print('Output file is "' + output_dir + '"\n')
     standardize_data(input_dir,output_dir)
     exit()
 
@@ -53,9 +53,9 @@ def print_help():
     return
 
 
-def standardize_data(input_dir, output_dir):
-    accelerometer = Accelerometer(input_dir, output_dir)
-    accelerometer.export_csv()
+def standardize_data(input_path, output_path):
+    moves = Moves(input_path, output_path)
+    moves.export_all()
 
 
 
