@@ -3,12 +3,14 @@ import sys
 import getopt
 import os
 from hexoskin.standardize.moves import Moves
+from hexoskin.standardize.breathing import Breathing
 
 
 def main(argv):
     # Define the default directories
     input_dir = 'input-data'
     output_dir = 'output-data'
+
 
     # Try to get the parameters
     try:
@@ -38,7 +40,7 @@ def main(argv):
 
     print('\nInput file is "' + input_dir + '"')
     print('Output file is "' + output_dir + '"\n')
-    standardize_data(input_dir,output_dir)
+    standardize_data(input_dir, output_dir)
     exit()
 
 
@@ -55,7 +57,9 @@ def print_help():
 
 def standardize_data(input_path, output_path):
     moves = Moves(input_path, output_path)
+    breathing = Breathing(input_path, output_path)
     moves.export_all()
+    breathing.export_all()
 
 
 
