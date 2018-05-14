@@ -30,6 +30,6 @@ class Inspiration:
         # Generate the CSV
         with open(self.__output_path + '/inspiration.csv', 'w', newline='') as csvfile:
             filewriter = csv.writer(csvfile, dialect='excel')
-            filewriter.writerow(['TimeCode', 'Expiration'])
+            filewriter.writerow(['TimeCode', 'Inspiration'])
             for timecode in self.__data.keys():
                 filewriter.writerow([timecode, self.__data[timecode]])

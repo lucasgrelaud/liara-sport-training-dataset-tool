@@ -10,7 +10,7 @@ from .exception.WavImportException import WavImportException
 class MinuteVentilation:
 
     def __init__(self, input_path, output_path):
-        self.__file_path = input_path + '/breathing_rate.wav'
+        self.__file_path = input_path + '/minute_ventilation.wav'
         self.__output_path = output_path
 
         # Try to import the data from a specific WAV file
@@ -21,7 +21,7 @@ class MinuteVentilation:
         except ValueError:
             raise WavImportException('The file "' + self.__file_path + '" has been corrupted and cannot be read.')
 
-        print(colored('The breathing rate data are fully imported.', 'green'))
+        print(colored('The minute_ventilation data are fully imported.', 'green'))
 
         self.__nrecords = self.__raw_data.size
         self.__time = self.__raw_data.size / self.__rate
@@ -64,8 +64,8 @@ class MinuteVentilation:
             print('Create the output directory : "' + self.__output_path + '".')
 
         # Generate the CSV
-        with open(self.__output_path + '/breathing_rate.csv', 'w', newline='') as csvfile:
+        with open(self.__output_path + '/minute_ventilation.csv', 'w', newline='') as csvfile:
             filewriter = csv.writer(csvfile, dialect='excel')
-            filewriter.writerow(['TimeCode', 'BreathingRate(RPM)'])
+            filewriter.writerow(['TimeCode', 'MinuteVentilation(mL/min)'])
             for timecode in self.__data.keys():
                 filewriter.writerow([timecode, self.__data[timecode]])
