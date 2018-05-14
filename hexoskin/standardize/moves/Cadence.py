@@ -21,7 +21,6 @@ class Cadence:
         except ValueError:
             raise WavImportException('The file "' + self.__file_path + '" has been corrupted and cannot be read.')
 
-        print(colored('The cadence data are fully imported.', 'green'))
 
         self.__nrecords = self.__raw_data.size
         self.__time = self.__raw_data.size / self.__rate
@@ -68,4 +67,4 @@ class Cadence:
             filewriter = csv.writer(csvfile, dialect='excel')
             filewriter.writerow(['TimeCode', 'Cadence(Step/min)'])
             for timecode in self.__data.keys():
-                filewriter.writerow([timecode, self.__data[timecode]])
+                filewriter.writerow([timecode, self.__data.get(timecode)])

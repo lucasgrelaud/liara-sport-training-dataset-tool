@@ -28,7 +28,6 @@ class DevicePosition:
             for row in filereader:
                 timecode = datetime.utcfromtimestamp(float(row[0]))
                 self.__data[timecode.strftime('%H:%M:%S:%f')] = row[1]
-        print(colored('The device_position data are fully imported.', 'green'))
 
 
     def export_csv(self):
@@ -42,4 +41,4 @@ class DevicePosition:
             filewriter = csv.writer(csvfile, dialect='excel')
             filewriter.writerow(['TimeCode', 'Position'])
             for timecode in self.__data.keys():
-                filewriter.writerow([timecode, self.__data[timecode]])
+                filewriter.writerow([timecode, self.__data.get(timecode)])

@@ -5,3 +5,4 @@ from .Inspiration import Inspiration
 from .MinuteVentilation import MinuteVentilation
 from .Respiration import Respiration
 from .TidalVolume import TidalVolume
+from .exception import WavImportException

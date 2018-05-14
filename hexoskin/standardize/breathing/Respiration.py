@@ -5,6 +5,7 @@ from datetime import datetime
 from datetime import timedelta
 from scipy.io import wavfile
 from .exception.WavImportException import WavImportException
+from .exception.DataImportException import DataImportException
 
 
 class Respiration:
@@ -17,25 +18,39 @@ class Respiration:
         try:
             self.__rate, self.__raw_data = wavfile.read(self.__file_path + '/respiration_abdominal.wav')
         except FileNotFoundError:
+            self.__rate = None
+            self.__raw_data = None
             raise WavImportException('\nERROR : The file "' + self.__file_path + '/respiration_abdominal.wav'
                                      + '" can\'t be found.')
         except ValueError:
+            self.__rate = None
+            self.__raw_data = None
             raise WavImportException('The file "' + self.__file_path + '/respiration_abdominal.wav'
                                      + '" has been corrupted and cannot be read.')
 
         try:
             self.__rate2, self.__raw_data2 = wavfile.read(self.__file_path + '/respiration_thoracic.wav')
         except FileNotFoundError:
+            self.__rate2 = None
+            self.__raw_data2 = None
             raise WavImportException('\nERROR : The file "' + self.__file_path + '/respiration_thoracic.wav'
                                      + '" can\'t be found.')
         except ValueError:
+            self.__rate2 = None
+            self.__raw_data2 = None
             raise WavImportException('The file "' + self.__file_path + '/respiration_thoracic.wav'
                                      + '" has been corrupted and cannot be read.')
 
+        if not self.__rate and not self.__rate2:
+            raise DataImportException('The Respiration Object can\'t be initialized because all the related'
+                                      'files are missing or corrupted.')
 
-
-        self.__nrecords = self.__raw_data.size
-        self.__time = self.__raw_data.size / self.__rate
+        if self.__rate:
+            self.__nrecords = self.__raw_data.size
+            self.__time = self.__raw_data.size / self.__rate
+        else:
+            self.__nrecords = self.__raw_data2.size
+            self.__time = self.__raw_data2.size / self.__rate2
         self.__data_abdominal = {}
         self.__data_thoracic = {}
         self.__add_timecode()
@@ -64,16 +79,16 @@ class Respiration:
         """
         timecode = datetime(1970, 1, 1, 0, 0, 0, 0)
         delta = timedelta(microseconds=(1 / self.__rate) * 1000000)
-
-        for record in self.__raw_data:
-            self.__data_abdominal[timecode.strftime('%H:%M:%S:%f')] = record
-            timecode = timecode + delta
+        if self.__rate:
+            for record in self.__raw_data:
+                self.__data_abdominal[timecode.strftime('%H:%M:%S:%f')] = record
+                timecode = timecode + delta
 
         timecode = datetime(1970, 1, 1, 0, 0, 0, 0)
-
-        for record in self.__raw_data2:
-            self.__data_thoracic[timecode.strftime('%H:%M:%S:%f')] = record
-            timecode = timecode + delta
+        if self.__rate2:
+            for record in self.__raw_data2:
+                self.__data_thoracic[timecode.strftime('%H:%M:%S:%f')] = record
+                timecode = timecode + delta
 
     def export_csv(self):
         # Create the directory if needed
@@ -85,5 +100,11 @@ class Respiration:
         with open(self.__output_path + '/respiration.csv', 'w', newline='') as csvfile:
             filewriter = csv.writer(csvfile, dialect='excel')
             filewriter.writerow(['TimeCode', 'RespirationAbdominal', 'RespirationThoracic(mL)'])
-            for timecode in self.__data_abdominal.keys():
-                filewriter.writerow([timecode, self.__data_abdominal[timecode],  self.__data_thoracic[timecode]])
+            if self.__data_abdominal:
+                for timecode in self.__data_abdominal.keys():
+                    filewriter.writerow(
+                        [timecode, self.__data_abdominal.get(timecode), self.__data_thoracic.get(timecode)])
+            else:
+                for timecode in self.__data_thoracic.keys():
+                    filewriter.writerow(
+                        [timecode, self.__data_abdominal.get(timecode), self.__data_thoracic.get(timecode)])

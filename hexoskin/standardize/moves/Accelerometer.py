@@ -32,8 +32,6 @@ class Accelerometer:
         # Test if all the axis has been imported
         if not self.__is_fully_initialized():
             print(colored('\nWARNING : The accelerometer data are partials', 'yellow'))
-        else:
-            print(colored('The accelerometer data are fully imported.', 'green'))
 
     def __is_fully_initialized(self):
         return self.__x_axis is not None \
@@ -47,11 +45,25 @@ class Accelerometer:
             print('Create the output directory : "' + self.__output_path + '".')
 
         # Generate the CSV
-        x_data = self.__x_axis.get_data()
-        y_data = self.__y_axis.get_data()
-        z_data = self.__z_axis.get_data()
+        x_data = {}
+        y_data = {}
+        z_data = {}
+        if self.__x_axis:
+            x_data = self.__x_axis.get_data()
+        if self.__y_axis:
+            y_data = self.__y_axis.get_data()
+        if self.__z_axis:
+            z_data = self.__z_axis.get_data()
+
         with open(self.__output_path + '/accelerometer.csv', 'w', newline='') as csvfile:
             filewriter = csv.writer(csvfile, dialect='excel')
-            filewriter.writerow(['TimeCode', 'X(G/256)', 'Y(G/256)', 'Z(G/256)'])
-            for timecode in x_data.keys():
-                filewriter.writerow([timecode, x_data[timecode], y_data[timecode], z_data[timecode]])
+            filewriter.writerow(['TimeCode', 'X(G)', 'Y(G)', 'Z(G)'])
+            if x_data:
+                for timecode in x_data.keys():
+                    filewriter.writerow([timecode, x_data.get(timecode), y_data.get(timecode), z_data.get(timecode)])
+            elif y_data:
+                for timecode in y_data.keys():
+                    filewriter.writerow([timecode, x_data.get(timecode), y_data.get(timecode), z_data.get(timecode)])
+            else:
+                for timecode in z_data.keys():
+                    filewriter.writerow([timecode, x_data.get(timecode), y_data.get(timecode), z_data.get(timecode)])

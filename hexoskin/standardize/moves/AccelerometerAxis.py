@@ -12,7 +12,7 @@ class AccelerometerAxis:
         try:
             self._rate, self.__raw_data = wavfile.read(file_path)
         except FileNotFoundError:
-            raise WavImportException('\nERROR : The file "' + file_path + '" can\'t be found.')
+            raise WavImportException('ERROR : The file "' + file_path + '" can\'t be found.')
         except ValueError:
             raise WavImportException('The file "' + file_path + '" has been corrupted and cannot be read')
 

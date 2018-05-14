@@ -29,37 +29,37 @@ class Breathing:
             self.__breathing_rate = BreathingRate(self.__input_path, self.__output_path)
         except WavImportException as error:
             self.__breathing_rate = None
-            print(colored(error.message, 'red'))
+            print(colored(error.args, 'red'))
         try:
             self.__breathing_rate_quality = BreathingRateQuality(self.__input_path, self.__output_path)
         except WavImportException as error:
             self.__breathing_rate_quality = None
-            print(colored(error.message, 'red'))
+            print(colored(error.args, 'red'))
         try:
             self.__inspiration = Inspiration(self.__input_path, self.__output_path)
         except FileExistsError as error:
             self.__inspiration = None
-            print(colored('\nERROR : The file "' + error.filename + '" can\'t be found.'), 'red')
+            print(colored('\nERROR : The file "' + error.filename + '" can\'t be found.', 'red'))
         try:
             self.__expiration = Expiration(self.__input_path, self.__output_path)
         except FileExistsError as error:
             self.__expiration = None
-            print(colored('\nERROR : The file "' + error.filename + '" can\'t be found.'), 'red')
+            print(colored('\nERROR : The file "' + error.filename + '" can\'t be found.', 'red'))
         try:
             self.__minute_ventilation = MinuteVentilation(self.__input_path, self.__output_path)
         except WavImportException as error:
             self.__minute_ventilation = None
-            print(colored(error.message, 'red'))
+            print(colored(error.args, 'red'))
         try:
             self.__respiration = Respiration(self.__input_path, self.__output_path)
         except WavImportException as error:
             self.__respiration = None
-            print(colored(error.message, 'red'))
+            print(colored(error.args, 'red'))
         try:
             self.__tidal_volume = TidalVolume(self.__input_path, self.__output_path)
         except WavImportException as  error:
             self.__tidal_volume = None
-            print(colored(error.message, 'red'))
+            print(colored(error.args, 'red'))
 
         print(colored('The breathing related data are imported.', 'green'))
 

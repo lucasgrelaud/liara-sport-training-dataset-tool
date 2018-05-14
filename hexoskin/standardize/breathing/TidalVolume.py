@@ -6,6 +6,7 @@ from datetime import timedelta
 from scipy.io import wavfile
 
 from .exception.WavImportException import WavImportException
+from .exception.DataImportException import DataImportException
 
 
 class TidalVolume:
@@ -18,25 +19,40 @@ class TidalVolume:
         try:
             self.__rate, self.__raw_data = wavfile.read(self.__file_path  + '/tidal_volume.wav')
         except FileNotFoundError:
+            self.__rate = None
+            self.__raw_data = None
             raise WavImportException('\nERROR : The file "' + self.__file_path + '/tidal_volume.wav'
                                      + '" can\'t be found.')
         except ValueError:
+            self.__rate = None
+            self.__raw_data = None
             raise WavImportException('The file "' + self.__file_path + '/tidal_volume.wav'
                                      + '" has been corrupted and cannot be read.')
 
         try:
             self.__rate2, self.__raw_data2 = wavfile.read(self.__file_path + '/tidal_volume_adjusted.wav')
         except FileNotFoundError:
+            self.__rate2 = None
+            self.__raw_data2 = None
             raise WavImportException('\nERROR : The file "' + self.__file_path + '/tidal_volume_adjusted.wav'
                                      + '" can\'t be found.')
         except ValueError:
+            self.__rate2 = None
+            self.__raw_data2 = None
             raise WavImportException('The file "' + self.__file_path + '/tidal_volume_adjusted.wav'
                                      + '" has been corrupted and cannot be read.')
 
+        if not self.__rate and not self.__rate2:
+            raise DataImportException('The TidalVolume Object can\'t be initialized because all the related'
+                                      'files are missing or corrupted.')
 
 
-        self.__nrecords = self.__raw_data.size
-        self.__time = self.__raw_data.size / self.__rate
+        if self.__rate:
+            self.__nrecords = self.__raw_data.size
+            self.__time = self.__raw_data.size / self.__rate
+        else:
+            self.__nrecords = self.__raw_data2.size
+            self.__time = self.__raw_data2.size / self.__rate2
         self.__data = {}
         self.__data_adjusted = {}
         self.__add_timecode()
@@ -65,14 +81,15 @@ class TidalVolume:
         """
         timecode = datetime(1970, 1, 1, 0, 0, 0, 0)
         delta = timedelta(microseconds=(1 / self.__rate) * 1000000)
-
-        for record in self.__raw_data:
-            self.__data[timecode.strftime('%H:%M:%S:%f')] = record
-            timecode = timecode + delta
+        if self.__rate:
+            for record in self.__raw_data:
+                self.__data[timecode.strftime('%H:%M:%S:%f')] = record
+                timecode = timecode + delta
         timecode = datetime(1970, 1, 1, 0, 0, 0, 0)
-        for record in self.__raw_data2:
-            self.__data_adjusted[timecode.strftime('%H:%M:%S:%f')] = record
-            timecode = timecode + delta
+        if self.__rate2:
+            for record in self.__raw_data2:
+                self.__data_adjusted[timecode.strftime('%H:%M:%S:%f')] = record
+                timecode = timecode + delta
 
     def export_csv(self):
         # Create the directory if needed
@@ -84,5 +101,9 @@ class TidalVolume:
         with open(self.__output_path + '/tidal_volume.csv', 'w', newline='') as csvfile:
             filewriter = csv.writer(csvfile, dialect='excel')
             filewriter.writerow(['TimeCode', 'TidalVolume(RPM)', 'TidalVolumeAdjusted(RPM)'])
-            for timecode in self.__data.keys():
-                filewriter.writerow([timecode, self.__data[timecode], self.__data_adjusted[timecode]])
+            if self.__data:
+                for timecode in self.__data.keys():
+                    filewriter.writerow([timecode, self.__data.get(timecode), self.__data_adjusted.get(timecode)])
+            else:
+                for timecode in self.__data_adjusted.keys():
+                    filewriter.writerow([timecode, self.__data.get(timecode), self.__data_adjusted.get(timecode)])

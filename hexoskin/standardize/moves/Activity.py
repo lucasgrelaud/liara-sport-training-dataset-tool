@@ -20,8 +20,6 @@ class Activity:
         except ValueError:
             raise WavImportException('The file "' + self.__file_path + '" has been corrupted and cannot be read.')
 
-        print(colored('The activity data are fully imported.', 'green'))
-
         self.__nrecords = self.__raw_data.size
         self.__time = self.__raw_data.size / self.__rate
         self.__data = {}
@@ -65,6 +63,6 @@ class Activity:
         # Generate the CSV
         with open(self.__output_path + '/activity.csv', 'w', newline='') as csvfile:
             filewriter = csv.writer(csvfile, dialect='excel')
-            filewriter.writerow(['TimeCode', 'Activity(G/256)'])
+            filewriter.writerow(['TimeCode', 'Activity(G)'])
             for timecode in self.__data.keys():
-                filewriter.writerow([timecode, self.__data[timecode]])
+                filewriter.writerow([timecode, self.__data.get(timecode)])

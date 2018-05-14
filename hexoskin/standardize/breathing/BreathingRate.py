@@ -67,4 +67,4 @@ class BreathingRate:
             filewriter = csv.writer(csvfile, dialect='excel')
             filewriter.writerow(['TimeCode', 'BreathingRate(RPM)'])
             for timecode in self.__data.keys():
-                filewriter.writerow([timecode, self.__data[timecode]])
+                filewriter.writerow([timecode, self.__data.get(timecode)])

@@ -5,3 +5,4 @@ from .Cadence import Cadence
 from .DevicePosition import DevicePosition
 from .Step import Step
 from .Moves import Moves
+from .exception import WavImportException
