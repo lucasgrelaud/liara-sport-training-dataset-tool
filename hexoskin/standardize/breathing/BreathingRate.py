@@ -1,9 +1,10 @@
-import os
 import csv
-from termcolor import colored
+import os
 from datetime import datetime
 from datetime import timedelta
+
 from scipy.io import wavfile
+
 from .exception.WavImportException import WavImportException
 
 
@@ -20,8 +21,6 @@ class BreathingRate:
             raise WavImportException('\nERROR : The file "' + self.__file_path + '" can\'t be found.')
         except ValueError:
             raise WavImportException('The file "' + self.__file_path + '" has been corrupted and cannot be read.')
-
-        print(colored('The breathing rate data are fully imported.', 'green'))
 
         self.__nrecords = self.__raw_data.size
         self.__time = self.__raw_data.size / self.__rate

@@ -1,6 +1,6 @@
 import os
 import csv
-from termcolor import colored
+
 from datetime import datetime
 from datetime import timedelta
 from scipy.io import wavfile
@@ -32,7 +32,7 @@ class Respiration:
             raise WavImportException('The file "' + self.__file_path + '/respiration_thoracic.wav'
                                      + '" has been corrupted and cannot be read.')
 
-        print(colored('The respiration data are fully imported.', 'green'))
+
 
         self.__nrecords = self.__raw_data.size
         self.__time = self.__raw_data.size / self.__rate

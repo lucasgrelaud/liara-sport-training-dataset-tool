@@ -1,6 +1,5 @@
-import os
 import csv
-from termcolor import colored
+import os
 from datetime import datetime
 
 
@@ -18,7 +17,6 @@ class Inspiration:
             for row in filereader:
                 timecode = datetime.utcfromtimestamp(float(row[0]))
                 self.__data[timecode.strftime('%H:%M:%S:%f')] = row[1]
-        print(colored('The inspiration data are fully imported.', 'green'))
 
     def export_csv(self):
         # Create the directory if needed

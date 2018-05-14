@@ -1,9 +1,10 @@
-import os
 import csv
-from termcolor import colored
+import os
 from datetime import datetime
 from datetime import timedelta
+
 from scipy.io import wavfile
+
 from .exception.WavImportException import WavImportException
 
 
@@ -21,6 +22,7 @@ class BreathingRateQuality:
     RESP_STATUS_NOISY_B (0x20) /!< Resp B has high frequency content. /
         Flag is raises if we detect more than 20 zero crossing in the last second
     """
+
     def __init__(self, input_path, output_path):
         self.__file_path = input_path + '/breathing_rate_quality.wav'
         self.__output_path = output_path
@@ -32,8 +34,6 @@ class BreathingRateQuality:
             raise WavImportException('\nERROR : The file "' + self.__file_path + '" can\'t be found.')
         except ValueError:
             raise WavImportException('The file "' + self.__file_path + '" has been corrupted and cannot be read.')
-
-        print(colored('The breathing rate quality data are fully imported.', 'green'))
 
         self.__nrecords = self.__raw_data.size
         self.__time = self.__raw_data.size / self.__rate

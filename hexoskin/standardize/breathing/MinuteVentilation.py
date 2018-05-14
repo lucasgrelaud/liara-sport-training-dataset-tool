@@ -1,9 +1,10 @@
-import os
 import csv
-from termcolor import colored
+import os
 from datetime import datetime
 from datetime import timedelta
+
 from scipy.io import wavfile
+
 from .exception.WavImportException import WavImportException
 
 
@@ -31,8 +32,6 @@ class MinuteVentilation:
         except ValueError:
             raise WavImportException('The file "' + self.__file_path + '/minute_ventilation_adjusted.wav'
                                      + '" has been corrupted and cannot be read.')
-
-        print(colored('The minute_ventilation data are fully imported.', 'green'))
 
         self.__nrecords = self.__raw_data.size
         self.__time = self.__raw_data.size / self.__rate
