@@ -4,6 +4,8 @@ from .BreathingRateQuality import BreathingRateQuality
 from .Inspiration import Inspiration
 from .Expiration import Expiration
 from .MinuteVentilation import MinuteVentilation
+from .MinuteVentilationAdjusted import MinuteVentilationAdjusted
+from .Respiration import Respiration
 
 class Breathing:
 
@@ -26,6 +28,8 @@ class Breathing:
         self.__inspiration = Inspiration(self.__input_path, self.__output_path)
         self.__expiration = Expiration(self.__input_path, self.__output_path)
         self.__minute_ventilation = MinuteVentilation(self.__input_path, self.__output_path)
+        self.__minute_ventilation_adjusted = MinuteVentilationAdjusted(self.__input_path, self.__output_path)
+        self.__respiration = Respiration(self.__input_path, self.__output_path)
 
     def export_all(self):
         self.__breathing_rate.export_csv()
@@ -33,3 +37,5 @@ class Breathing:
         self.__inspiration.export_csv()
         self.__expiration.export_csv()
         self.__minute_ventilation.export_csv()
+        self.__minute_ventilation_adjusted.export_csv()
+        self.__respiration.export_csv()

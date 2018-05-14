@@ -4,7 +4,6 @@ from termcolor import colored
 from datetime import datetime
 
 
-
 class Inspiration:
 
     def __init__(self, input_path, output_path):
