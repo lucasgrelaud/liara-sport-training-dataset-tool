@@ -3,6 +3,7 @@ from .Accelerometer import Accelerometer
 from .Activity import Activity
 from .Cadence import Cadence
 from .DevicePosition import DevicePosition
+from .Step import Step
 
 
 class Moves:
@@ -25,9 +26,11 @@ class Moves:
         self.__activity = Activity(self.__input_path, self.__output_path)
         self.__cadence = Cadence(self.__input_path, self.__output_path)
         self.__device_position = DevicePosition(self.__input_path, self.__output_path)
+        self.__step = Step(self.__input_path, self.__output_path)
 
     def export_all(self):
         self.__accelerometer.export_csv()
         self.__activity.export_csv()
         self.__cadence.export_csv()
         self.__device_position.export_csv()
+        self.__step.export_csv()
