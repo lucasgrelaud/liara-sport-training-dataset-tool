@@ -10,22 +10,34 @@ from .exception.WavImportException import WavImportException
 class MinuteVentilation:
 
     def __init__(self, input_path, output_path):
-        self.__file_path = input_path + '/minute_ventilation.wav'
+        self.__file_path = input_path
         self.__output_path = output_path
 
         # Try to import the data from a specific WAV file
         try:
-            self.__rate, self.__raw_data = wavfile.read(self.__file_path)
+            self.__rate, self.__raw_data = wavfile.read(self.__file_path + '/minute_ventilation.wav')
         except FileNotFoundError:
-            raise WavImportException('\nERROR : The file "' + self.__file_path + '" can\'t be found.')
+            raise WavImportException('\nERROR : The file "' + self.__file_path + '/minute_ventilation.wav'
+                                     + '" can\'t be found.')
         except ValueError:
-            raise WavImportException('The file "' + self.__file_path + '" has been corrupted and cannot be read.')
+            raise WavImportException('The file "' + self.__file_path + '/minute_ventilation.wav'
+                                     + '" has been corrupted and cannot be read.')
+
+        try:
+            self.__rate2, self.__raw_data2 = wavfile.read(self.__file_path + '/minute_ventilation_adjusted.wav')
+        except FileNotFoundError:
+            raise WavImportException('\nERROR : The file "' + self.__file_path + '/minute_ventilation_adjusted.wav'
+                                     + '" can\'t be found.')
+        except ValueError:
+            raise WavImportException('The file "' + self.__file_path + '/minute_ventilation_adjusted.wav'
+                                     + '" has been corrupted and cannot be read.')
 
         print(colored('The minute_ventilation data are fully imported.', 'green'))
 
         self.__nrecords = self.__raw_data.size
         self.__time = self.__raw_data.size / self.__rate
         self.__data = {}
+        self.__data_adjusted = {}
         self.__add_timecode()
 
     def get_time(self):
@@ -56,6 +68,10 @@ class MinuteVentilation:
         for record in self.__raw_data:
             self.__data[timecode.strftime('%H:%M:%S:%f')] = record
             timecode = timecode + delta
+        timecode = datetime(1970, 1, 1, 0, 0, 0, 0)
+        for record in self.__raw_data2:
+            self.__data_adjusted[timecode.strftime('%H:%M:%S:%f')] = record
+            timecode = timecode + delta
 
     def export_csv(self):
         # Create the directory if needed
@@ -66,6 +82,6 @@ class MinuteVentilation:
         # Generate the CSV
         with open(self.__output_path + '/minute_ventilation.csv', 'w', newline='') as csvfile:
             filewriter = csv.writer(csvfile, dialect='excel')
-            filewriter.writerow(['TimeCode', 'MinuteVentilation(mL/min)'])
+            filewriter.writerow(['TimeCode', 'MinuteVentilation(mL/min)', 'MinuteVentilationAdjusted(mL/min)'])
             for timecode in self.__data.keys():
-                filewriter.writerow([timecode, self.__data[timecode]])
+                filewriter.writerow([timecode, self.__data[timecode], self.__data_adjusted[timecode]])
