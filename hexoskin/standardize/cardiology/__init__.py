@@ -1,3 +1,3 @@
 from .ECG import ECG
-from .HeartRate import HeartRate
+from .Cardiology import Cardiology
 from .exception import *
