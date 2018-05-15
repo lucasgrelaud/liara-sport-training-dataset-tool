@@ -1,9 +1,11 @@
 #!/usr/bin/python3
-import sys
 import getopt
 import os
-from hexoskin.standardize.moves import Moves
+import sys
+
 from hexoskin.standardize.breathing import Breathing
+from hexoskin.standardize.heart_rate import HeartRate
+from hexoskin.standardize.moves import Moves
 
 
 def main(argv):
@@ -58,8 +60,10 @@ def print_help():
 def standardize_data(input_path, output_path):
     moves = Moves(input_path, output_path)
     breathing = Breathing(input_path, output_path)
+    heart_rate = HeartRate(input_path, output_path)
     moves.export_all()
     breathing.export_all()
+    heart_rate.export_all()
 
 
 
