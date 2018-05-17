@@ -21,7 +21,7 @@ class MinuteVentilation:
         except FileNotFoundError:
             self.__rate = None
             self.__raw_data = None
-            raise WavImportException('\nERROR : The file "' + self.__file_path + '/minute_ventilation.wav'
+            raise WavImportException('ERROR : The file "' + self.__file_path + '/minute_ventilation.wav'
                                      + '" can\'t be found.')
         except ValueError:
             self.__rate = None
@@ -34,7 +34,7 @@ class MinuteVentilation:
         except FileNotFoundError:
             self.__rate2 = None
             self.__raw_data2 = None
-            raise WavImportException('\nERROR : The file "' + self.__file_path + '/minute_ventilation_adjusted.wav'
+            raise WavImportException('ERROR : The file "' + self.__file_path + '/minute_ventilation_adjusted.wav'
                                      + '" can\'t be found.')
         except ValueError:
             self.__rate2 = None

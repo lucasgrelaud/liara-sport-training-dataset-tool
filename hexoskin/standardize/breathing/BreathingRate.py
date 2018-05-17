@@ -11,20 +11,40 @@ from .exception.WavImportException import WavImportException
 class BreathingRate:
 
     def __init__(self, input_path, output_path):
-        self.__file_path = input_path + '/breathing_rate.wav'
+        self.__file_path = input_path
         self.__output_path = output_path
 
         # Try to import the data from a specific WAV file
         try:
-            self.__rate, self.__raw_data = wavfile.read(self.__file_path)
+            self.__rate, self.__raw_data = wavfile.read(self.__file_path + '/breathing_rate.wav')
         except FileNotFoundError:
-            raise WavImportException('\nERROR : The file "' + self.__file_path + '" can\'t be found.')
+            raise WavImportException('ERROR : The file "' + self.__file_path + '/breathing_rate.wav'
+                                     + '" can\'t be found.')
         except ValueError:
-            raise WavImportException('The file "' + self.__file_path + '" has been corrupted and cannot be read.')
+            raise WavImportException('The file "' + self.__file_path + '/breathing_rate.wav'
+                                     + '" has been corrupted and cannot be read.')
 
-        self.__nrecords = self.__raw_data.size
-        self.__time = self.__raw_data.size / self.__rate
+        try:
+            self.__rate2, self.__raw_data2 = wavfile.read(self.__file_path + '/breathing_rate_quality.wav')
+        except FileNotFoundError:
+            raise WavImportException('ERROR : The file "' + self.__file_path + '/breathing_rate_quality.wav'
+                                     + '" can\'t be found.')
+        except ValueError:
+            raise WavImportException('The file "' + self.__file_path + '/breathing_rate_quality.wav'
+                                     + '" has been corrupted and cannot be read.')
+
+        if not self.__rate and not self.__rate2:
+            raise WavImportException('The BreathingRate Object can\'t be initialized because all the related '
+                                     'files are missing or corrupted.')
+
+        if self.__rate:
+            self.__nrecords = self.__raw_data.size
+            self.__time = self.__raw_data.size / self.__rate
+        else:
+            self.__nrecords = self.__raw_data2.size
+            self.__time = self.__raw_data2.size / self.__rate2
         self.__data = {}
+        self.__data2 = {}
         self.__add_timecode()
 
     def get_time(self):
@@ -52,9 +72,15 @@ class BreathingRate:
         timecode = datetime(1970, 1, 1, 0, 0, 0, 0)
         delta = timedelta(microseconds=(1 / self.__rate) * 1000000)
 
-        for record in self.__raw_data:
-            self.__data[timecode.strftime('%H:%M:%S:%f')] = record
-            timecode = timecode + delta
+        if self.__rate:
+            for record in self.__raw_data:
+                self.__data[timecode.strftime('%H:%M:%S:%f')] = record
+                timecode = timecode + delta
+        timecode = datetime(1970, 1, 1, 0, 0, 0, 0)
+        if self.__rate2:
+            for record in self.__raw_data2:
+                self.__data2[timecode.strftime('%H:%M:%S:%f')] = record
+                timecode = timecode + delta
 
     def export_csv(self):
         # Create the directory if needed
@@ -65,6 +91,10 @@ class BreathingRate:
         # Generate the CSV
         with open(self.__output_path + '/breathing_rate.csv', 'w', newline='') as csvfile:
             filewriter = csv.writer(csvfile, dialect='excel')
-            filewriter.writerow(['TimeCode', 'BreathingRate(RPM)'])
-            for timecode in self.__data.keys():
-                filewriter.writerow([timecode, self.__data.get(timecode)])
+            filewriter.writerow(['TimeCode', 'BreathingRate(RPM)', 'Quality'])
+            if self.__data:
+                for timecode in self.__data.keys():
+                    filewriter.writerow([timecode, self.__data.get(timecode), self.__data2.get(timecode)])
+            else:
+                for timecode in self.__data2.keys():
+                    filewriter.writerow([timecode, self.__data.get(timecode), self.__data2.get(timecode)])

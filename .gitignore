@@ -1,4 +1,12 @@
+
 .idea/
+
+bin/
+lib/
+lib64
+share/
+pyvenv.cfg
+
 venv/
 input-data/
 output-data/
@@ -9,3 +17,5 @@ Include/
 pip-selfcheck.json
 
 *.py[cod]
+Supprimerait include/
+Supprimerait lib64

@@ -21,7 +21,7 @@ class TidalVolume:
         except FileNotFoundError:
             self.__rate = None
             self.__raw_data = None
-            raise WavImportException('\nERROR : The file "' + self.__file_path + '/tidal_volume.wav'
+            raise WavImportException('ERROR : The file "' + self.__file_path + '/tidal_volume.wav'
                                      + '" can\'t be found.')
         except ValueError:
             self.__rate = None
@@ -34,7 +34,7 @@ class TidalVolume:
         except FileNotFoundError:
             self.__rate2 = None
             self.__raw_data2 = None
-            raise WavImportException('\nERROR : The file "' + self.__file_path + '/tidal_volume_adjusted.wav'
+            raise WavImportException('ERROR : The file "' + self.__file_path + '/tidal_volume_adjusted.wav'
                                      + '" can\'t be found.')
         except ValueError:
             self.__rate2 = None

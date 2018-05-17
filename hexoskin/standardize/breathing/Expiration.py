@@ -1,6 +1,7 @@
 import os
 import csv
 from datetime import datetime
+from .exception.DataImportException import DataImportException
 
 
 class Expiration:
@@ -11,12 +12,15 @@ class Expiration:
         self.__data = {}
 
         # Import the old CSV
-        with open(self.__input_file, newline='') as csvfile:
-            filereader = csv.reader(csvfile, dialect='excel')
-            filereader.__next__()
-            for row in filereader:
-                timecode = datetime.utcfromtimestamp(float(row[0]))
-                self.__data[timecode.strftime('%H:%M:%S:%f')] = row[1]
+        try:
+            with open(self.__input_file, newline='') as csvfile:
+                filereader = csv.reader(csvfile, dialect='excel')
+                filereader.__next__()
+                for row in filereader:
+                    timecode = datetime.utcfromtimestamp(float(row[0]))
+                    self.__data[timecode.strftime('%H:%M:%S:%f')] = row[1]
+        except FileNotFoundError as error:
+            raise DataImportException('ERROR : The file "' + self.__input_file + '" can\'t be found.') from error
 
     def export_csv(self):
         # Create the directory if needed

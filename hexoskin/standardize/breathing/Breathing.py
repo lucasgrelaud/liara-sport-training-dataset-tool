@@ -1,13 +1,14 @@
 import os
 from termcolor import colored
 from .BreathingRate import BreathingRate
-from .BreathingRateQuality import BreathingRateQuality
 from .Inspiration import Inspiration
 from .Expiration import Expiration
 from .MinuteVentilation import MinuteVentilation
 from .Respiration import Respiration
 from .TidalVolume import TidalVolume
 from .exception import WavImportException
+from .exception.DataImportException import DataImportException
+
 
 class Breathing:
 
@@ -29,37 +30,32 @@ class Breathing:
             self.__breathing_rate = BreathingRate(self.__input_path, self.__output_path)
         except WavImportException as error:
             self.__breathing_rate = None
-            print(colored(error.args, 'red'))
-        try:
-            self.__breathing_rate_quality = BreathingRateQuality(self.__input_path, self.__output_path)
-        except WavImportException as error:
-            self.__breathing_rate_quality = None
-            print(colored(error.args, 'red'))
+            print(colored(error.args[0], 'red'))
         try:
             self.__inspiration = Inspiration(self.__input_path, self.__output_path)
-        except FileExistsError as error:
+        except DataImportException as error:
             self.__inspiration = None
-            print(colored('\nERROR : The file "' + error.filename + '" can\'t be found.', 'red'))
+            print(colored(error.args[0], 'red'))
         try:
             self.__expiration = Expiration(self.__input_path, self.__output_path)
-        except FileExistsError as error:
+        except DataImportException as error:
             self.__expiration = None
-            print(colored('\nERROR : The file "' + error.filename + '" can\'t be found.', 'red'))
+            print(colored(error.args[0], 'red'))
         try:
             self.__minute_ventilation = MinuteVentilation(self.__input_path, self.__output_path)
         except WavImportException as error:
             self.__minute_ventilation = None
-            print(colored(error.args, 'red'))
+            print(colored(error.args[0], 'red'))
         try:
             self.__respiration = Respiration(self.__input_path, self.__output_path)
         except WavImportException as error:
             self.__respiration = None
-            print(colored(error.args, 'red'))
+            print(colored(error.args[0], 'red'))
         try:
             self.__tidal_volume = TidalVolume(self.__input_path, self.__output_path)
         except WavImportException as  error:
             self.__tidal_volume = None
-            print(colored(error.args, 'red'))
+            print(colored(error.args[0], 'red'))
 
         print(colored('The breathing related data are imported.', 'green'))
 
@@ -67,8 +63,6 @@ class Breathing:
     def export_all(self):
         if self.__breathing_rate:
             self.__breathing_rate.export_csv()
-        if self.__breathing_rate_quality:
-            self.__breathing_rate_quality.export_csv()
         if self.__expiration:
             self.__expiration.export_csv()
         if self.__inspiration:
