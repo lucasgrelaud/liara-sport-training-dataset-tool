@@ -5,106 +5,138 @@ from datetime import datetime
 from datetime import timedelta
 from scipy.io import wavfile
 from .exception.WavImportException import WavImportException
-from .exception.DataImportException import DataImportException
+from .exception.CsvImportException import CsvImportException
 
 
 class Respiration:
+    """
+    Object that represent the respiration data of the test subject.
 
-    def __init__(self, input_path, output_path):
-        self.__file_path = input_path
-        self.__output_path = output_path
+    Parameters
+    ----------
+    input_dir : str
+        The path of the input data that will be imported.
+    output_dir : str
+        The path of the output data that will be generated.
+
+    Attributes
+    ----------
+    __input_dir: str
+        The path of the directory where are located the files to import.
+    __output_dir: str
+        The path of the directory where the output fill will be generated.
+    __file1_sampling_rate : int
+        The sampling rate of the file.
+    __file1_raw_data : list
+        The data stored in the file.
+    __file2_sampling_rate : int
+        The sampling rate of the file.
+    __file2_raw_data : list
+        The data stored in the file.
+    nrecords: int
+        The amount of records for the breathing_rate.
+    duration: int
+        The duration of the records.
+    respiration_abdominal: dict
+        The respiration_abdominal data as {timecode, record}
+    respiration_thoracic: dict
+        The respiration_thoracic data as {timecode, record}
+
+    Notes
+    -----
+        *Respiration :*
+            Frequency: 128 Hz
+            Raw data (oscillation count in 1/128s)
+            Resolution LSB = 128 Hz. i.e. 1 count in 1/128s
+            Estimated resolution 8 mL
+            Unit: mL
+            Unit (binary download): NA
+
+
+
+    """
+    def __init__(self, input_dir, output_dir):
+        self.__input_dir = input_dir
+        self.__output_dir = output_dir
 
         # Try to import the data from a specific WAV file
         try:
-            self.__rate, self.__raw_data = wavfile.read(self.__file_path + '/respiration_abdominal.wav')
+            self.__file1_sampling_rate, self.__file1_raw_data = wavfile.read(self.__input_dir
+                                                                             + '/respiration_abdominal.wav')
         except FileNotFoundError:
-            self.__rate = None
-            self.__raw_data = None
-            raise WavImportException('ERROR : The file "' + self.__file_path + '/respiration_abdominal.wav'
+            self.__file1_sampling_rate = None
+            self.__file1_raw_data = None
+            raise WavImportException('ERROR : The file "' + self.__input_dir + '/respiration_abdominal.wav'
                                      + '" can\'t be found.')
         except ValueError:
-            self.__rate = None
-            self.__raw_data = None
-            raise WavImportException('The file "' + self.__file_path + '/respiration_abdominal.wav'
+            self.__file1_sampling_rate = None
+            self.__file1_raw_data = None
+            raise WavImportException('The file "' + self.__input_dir + '/respiration_abdominal.wav'
                                      + '" has been corrupted and cannot be read.')
 
         try:
-            self.__rate2, self.__raw_data2 = wavfile.read(self.__file_path + '/respiration_thoracic.wav')
+            self.__file2_sampling_rate, self.__file2_raw_data = wavfile.read(self.__input_dir
+                                                                             + '/respiration_thoracic.wav')
         except FileNotFoundError:
-            self.__rate2 = None
-            self.__raw_data2 = None
-            raise WavImportException('ERROR : The file "' + self.__file_path + '/respiration_thoracic.wav'
+            self.__file2_sampling_rate = None
+            self.__file2_raw_data = None
+            raise WavImportException('ERROR : The file "' + self.__input_dir + '/respiration_thoracic.wav'
                                      + '" can\'t be found.')
         except ValueError:
-            self.__rate2 = None
-            self.__raw_data2 = None
-            raise WavImportException('The file "' + self.__file_path + '/respiration_thoracic.wav'
+            self.__file2_sampling_rate = None
+            self.__file2_raw_data = None
+            raise WavImportException('The file "' + self.__input_dir + '/respiration_thoracic.wav'
                                      + '" has been corrupted and cannot be read.')
 
-        if not self.__rate and not self.__rate2:
-            raise DataImportException('The Respiration Object can\'t be initialized because all the related'
-                                      'files are missing or corrupted.')
+        if not self.__file1_sampling_rate and not self.__file2_sampling_rate:
+            raise CsvImportException('The Respiration Object can\'t be initialized because all the related'
+                                     'files are missing or corrupted.')
 
-        if self.__rate:
-            self.__nrecords = self.__raw_data.size
-            self.__time = self.__raw_data.size / self.__rate
+        if self.__file1_sampling_rate:
+            self.nrecords = self.__file1_raw_data.size
+            self.duration = self.__file1_raw_data.size / self.__file1_sampling_rate
         else:
-            self.__nrecords = self.__raw_data2.size
-            self.__time = self.__raw_data2.size / self.__rate2
-        self.__data_abdominal = {}
-        self.__data_thoracic = {}
-        self.__add_timecode()
+            self.nrecords = self.__file2_raw_data.size
+            self.duration = self.__file2_raw_data.size / self.__file2_sampling_rate
+        self.respiration_abdominal = {}
+        self.respiration_thoracic = {}
+        self.__standardize()
 
-    def get_time(self):
-        return self.__time
-
-    def get_nrecords(self):
-        return self.__nrecords
-
-    def get_data(self):
-        return self.__data_abdominal
-
-    def print_result(self):
+    def __standardize(self):
         """
-            Print the metadata of the axis record.
-        """
-        print('Sample rate: ', self.__rate)
-        print('Records: ', self.__raw_data.size)
-        print('Duration (seconds): ', self.__time)
-
-    def __add_timecode(self):
-        """
-            Generate the records timecode based on the sample rate and
-            the recording duration
+        Standardize the imported data and add the timecode.
         """
         timecode = datetime(1970, 1, 1, 0, 0, 0, 0)
-        delta = timedelta(microseconds=(1 / self.__rate) * 1000000)
-        if self.__rate:
-            for record in self.__raw_data:
-                self.__data_abdominal[timecode.strftime('%H:%M:%S:%f')] = record
+        delta = timedelta(microseconds=(1 / self.__file1_sampling_rate) * 1000000)
+        if self.__file1_sampling_rate:
+            for record in self.__file1_raw_data:
+                self.respiration_abdominal[timecode.strftime('%H:%M:%S:%f')] = record
                 timecode = timecode + delta
 
         timecode = datetime(1970, 1, 1, 0, 0, 0, 0)
-        if self.__rate2:
-            for record in self.__raw_data2:
-                self.__data_thoracic[timecode.strftime('%H:%M:%S:%f')] = record
+        if self.__file2_sampling_rate:
+            for record in self.__file2_raw_data:
+                self.respiration_thoracic[timecode.strftime('%H:%M:%S:%f')] = record
                 timecode = timecode + delta
 
     def export_csv(self):
+        """
+        Export the respiration_abdominal and respiration_thoracic_quality to a CSV file.
+        """
         # Create the directory if needed
-        if not os.path.isdir(self.__output_path):
-            os.mkdir(self.__output_path)
-            print('Create the output directory : "' + self.__output_path + '".')
+        if not os.path.isdir(self.__output_dir):
+            os.mkdir(self.__output_dir)
+            print('Create the output directory : "' + self.__output_dir + '".')
 
         # Generate the CSV
-        with open(self.__output_path + '/respiration.csv', 'w', newline='') as csvfile:
+        with open(self.__output_dir + '/respiration.csv', 'w', newline='') as csvfile:
             filewriter = csv.writer(csvfile, dialect='excel')
-            filewriter.writerow(['TimeCode', 'RespirationAbdominal', 'RespirationThoracic(mL)'])
-            if self.__data_abdominal:
-                for timecode in self.__data_abdominal.keys():
+            filewriter.writerow(['TimeCode', 'RespirationAbdominal(mL)', 'RespirationThoracic(mL)'])
+            if self.respiration_abdominal:
+                for timecode in self.respiration_abdominal.keys():
                     filewriter.writerow(
-                        [timecode, self.__data_abdominal.get(timecode), self.__data_thoracic.get(timecode)])
+                        [timecode, self.respiration_abdominal.get(timecode), self.respiration_thoracic.get(timecode)])
             else:
-                for timecode in self.__data_thoracic.keys():
+                for timecode in self.respiration_thoracic.keys():
                     filewriter.writerow(
-                        [timecode, self.__data_abdominal.get(timecode), self.__data_thoracic.get(timecode)])
+                        [timecode, self.respiration_abdominal.get(timecode), self.respiration_thoracic.get(timecode)])

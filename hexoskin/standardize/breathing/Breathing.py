@@ -1,77 +1,127 @@
+# -*- coding: utf-8 -*-
 import os
+
 from termcolor import colored
+
 from .BreathingRate import BreathingRate
-from .Inspiration import Inspiration
 from .Expiration import Expiration
+from .Inspiration import Inspiration
 from .MinuteVentilation import MinuteVentilation
 from .Respiration import Respiration
 from .TidalVolume import TidalVolume
 from .exception import WavImportException
-from .exception.DataImportException import DataImportException
+from .exception.CsvImportException import CsvImportException
 
 
 class Breathing:
+    """
+    Object importing and standardizing all the data related to the breathing.
 
-    def __init__(self, input_path, output_path):
-        self.__input_path = input_path
-        self.__output_path = output_path + '/standardize'
+    Parameters
+    ----------
+        input_dir : str
+            The path of the directory where are located the files to import.
+        output_dir : str
+            The path of the directory where the output fill will be generated.
+            The final output_dir is defined by : output_dir + '/breathing'.
 
-        # Create the directory if needed
-        if not os.path.isdir(self.__output_path):
-            os.mkdir(self.__output_path)
-            print('Create the output directory : "' + self.__output_path + '".')
-        self.__output_path += '/breathing'
-        if not os.path.isdir(self.__output_path):
-            os.mkdir(self.__output_path)
-            print('Create the output directory : "' + self.__output_path + '".')
+    Attributes
+    ----------
+        __input_dir : str
+            The path of the directory where are located the files to import.
+        __output_dir : str
+            The path of the directory where the output fill will be generated.
+        breathing_rate : BreathingRate
+            Instance of the BreathingRate object
+            None if the object initialization have failed.
+        inspiration : Inspiration
+            Instance of the Inspiration object
+            None if the object initialization have failed.
+        expiration : Expiration
+            Instance of the Expiration object
+            None if the object initialization have failed.
+        minute_ventilation : MinuteVentilation
+            Instance of the MinuteVentilation object
+            None if the object initialization have failed.
+        respiration : Respiration
+            Instance of the Respiration object
+            None if the object initialization have failed.
+        tidal_volume : TidalVolume
+            Instance of the TidalVolume object
+            None if the object initialization have failed.
+    """
+
+    def __init__(self, input_dir: str, output_dir: str):
+        self.__input_dir = input_dir
+        self.__output_dir = output_dir + '/standardize'
+
+        # Create the output directory if needed
+        if not os.path.isdir(self.__output_dir):
+            os.mkdir(self.__output_dir)
+            print('Create the output directory : "{}".'.format(self.__output_dir))
+        self.__output_dir += '/breathing'
+        if not os.path.isdir(self.__output_dir):
+            os.mkdir(self.__output_dir)
+            print('Create the output directory : "{}".'.format(self.__output_dir))
 
         # Init the related objects
         try:
-            self.__breathing_rate = BreathingRate(self.__input_path, self.__output_path)
+            self.breathing_rate = BreathingRate(self.__input_dir, self.__output_dir)
         except WavImportException as error:
-            self.__breathing_rate = None
+            self.breathing_rate = None
             print(colored(error.args[0], 'red'))
+
         try:
-            self.__inspiration = Inspiration(self.__input_path, self.__output_path)
-        except DataImportException as error:
-            self.__inspiration = None
+            self.inspiration = Inspiration(self.__input_dir, self.__output_dir)
+        except CsvImportException as error:
+            self.inspiration = None
             print(colored(error.args[0], 'red'))
+
         try:
-            self.__expiration = Expiration(self.__input_path, self.__output_path)
-        except DataImportException as error:
-            self.__expiration = None
+            self.expiration = Expiration(self.__input_dir, self.__output_dir)
+        except CsvImportException as error:
+            self.expiration = None
             print(colored(error.args[0], 'red'))
+
         try:
-            self.__minute_ventilation = MinuteVentilation(self.__input_path, self.__output_path)
+            self.minute_ventilation = MinuteVentilation(self.__input_dir, self.__output_dir)
         except WavImportException as error:
-            self.__minute_ventilation = None
+            self.minute_ventilation = None
             print(colored(error.args[0], 'red'))
+
         try:
-            self.__respiration = Respiration(self.__input_path, self.__output_path)
+            self.respiration = Respiration(self.__input_dir, self.__output_dir)
         except WavImportException as error:
-            self.__respiration = None
+            self.respiration = None
             print(colored(error.args[0], 'red'))
+
         try:
-            self.__tidal_volume = TidalVolume(self.__input_path, self.__output_path)
-        except WavImportException as  error:
-            self.__tidal_volume = None
+            self.tidal_volume = TidalVolume(self.__input_dir, self.__output_dir)
+        except WavImportException as error:
+            self.tidal_volume = None
             print(colored(error.args[0], 'red'))
 
         print(colored('The breathing related data are imported.', 'green'))
 
+    def export_all_csv(self):
+        """
+        Export the standardized data of the related objects to a CSV file.
+        """
+        if self.breathing_rate:
+            self.breathing_rate.export_csv()
 
-    def export_all(self):
-        if self.__breathing_rate:
-            self.__breathing_rate.export_csv()
-        if self.__expiration:
-            self.__expiration.export_csv()
-        if self.__inspiration:
-            self.__inspiration.export_csv()
-        if self.__minute_ventilation:
-            self.__minute_ventilation.export_csv()
-        if self.__respiration:
-            self.__respiration.export_csv()
-        if self.__tidal_volume:
-            self.__tidal_volume.export_csv()
-        print(colored('The breathing related data are exported in csv in the folder '
-                      + self.__output_path + '.', 'green'))
+        if self.expiration:
+            self.expiration.export_csv()
+
+        if self.inspiration:
+            self.inspiration.export_csv()
+
+        if self.minute_ventilation:
+            self.minute_ventilation.export_csv()
+
+        if self.respiration:
+            self.respiration.export_csv()
+
+        if self.tidal_volume:
+            self.tidal_volume.export_csv()
+        print(colored('The breathing related data are exported in csv in the folder {}.', 'green'))
