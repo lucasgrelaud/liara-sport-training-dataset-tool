@@ -28,7 +28,7 @@ class Inspiration:
 
        Notes
        -----
-           *Expiration :*
+           *Inspiration :*
                    Frequency: Async
                    Method of calculation:
                             The inspiration and expiration are detected on the ponderate sum of the thoracic and

@@ -45,7 +45,7 @@ class MinuteVentilation:
 
     Notes
     -----
-        *Breathing Rate :*
+        *Minute ventilation :*
                 Frequency: 1 Hz
                 Average: last 7 respiration cycles
                 Valid range: (2 to 60 RPM)

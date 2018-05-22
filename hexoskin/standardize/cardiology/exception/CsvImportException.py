@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-class WavImportException(Exception):
+class CsvImportException(Exception):
     """
-    Exception returned when importing data from a WAV file failed
+    Exception returned when importing data from a CSV file failed
     """
 
     def __init__(self, message: str):
         """
-        Init WavImportException with the desired message.
+        Init CsvImportException with the desired message.
 
         Parameters
         ----------

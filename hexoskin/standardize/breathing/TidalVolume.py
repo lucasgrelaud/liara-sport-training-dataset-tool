@@ -45,13 +45,11 @@ class TidalVolume:
 
     Notes
     -----
-        *Breathing Rate :*
+        * Tidal Volume :*
                 Frequency: 1 Hz
-                Average: last 7 respiration cycles
-                Valid range: (2 to 60 RPM)
-                    If BR > 60: Clip to 60
-                    If BR < 2: set to 2
-                Unit: respiration per minute
+                Unit: mL (mL / inspiration)
+                Unit (binary download): mL *13.28
+
 
 
     """
