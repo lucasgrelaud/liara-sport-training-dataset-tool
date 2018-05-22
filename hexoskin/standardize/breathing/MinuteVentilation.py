@@ -5,8 +5,7 @@ from datetime import timedelta
 
 from scipy.io import wavfile
 
-from .exception.WavImportException import WavImportException
-from .exception.CsvImportException import CsvImportException
+from hexoskin.standardize.exception.WavImportException import WavImportException
 
 
 class MinuteVentilation:
@@ -35,7 +34,7 @@ class MinuteVentilation:
     __file2_raw_data : list
         The data stored in the file.
     nrecords: int
-        The amount of records for the breathing_rate.
+        The amount of records for the minute ventilation.
     duration: int
         The duration of the records.
     minute_ventilation: dict
@@ -90,7 +89,7 @@ class MinuteVentilation:
                                      'be read.'.format(self.__input_dir))
 
         if not self.__file1_sampling_rate and not self.__file2_sampling_rate:
-            raise CsvImportException('The MinuteVentilation Object can\'t be initialized because all the related '
+            raise WavImportException('The MinuteVentilation Object can\'t be initialized because all the related '
                                      'files are missing or corrupted.')
 
         if self.__file1_sampling_rate:
@@ -122,7 +121,7 @@ class MinuteVentilation:
 
     def export_csv(self):
         """
-        Export the breathing_rate and breathing_rate_quality to a CSV file.
+        Export the minute ventilation and breathing_rate_quality to a CSV file.
         """
         # Create the directory if needed
         if not os.path.isdir(self.__output_dir):

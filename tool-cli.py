@@ -58,12 +58,12 @@ def print_help():
 
 
 def standardize_data(input_path, output_path):
-    # moves = Moves(input_path, output_path)
+    moves = Moves(input_path, output_path)
     breathing = Breathing(input_path, output_path)
-    # heart_rate = Cardiology(input_path, output_path)
-    # moves.export_all()
-    breathing.export_all()
-    # heart_rate.export_all()
+    heart_rate = Cardiology(input_path, output_path)
+    moves.export_all()
+    breathing.export_all_csv()
+    heart_rate.export_all_csv()
 
 
 

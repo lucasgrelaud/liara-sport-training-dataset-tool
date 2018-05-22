@@ -1,7 +1,8 @@
 import csv
 import os
 from datetime import datetime
-from .exception.CsvImportException import CsvImportException
+
+from hexoskin.standardize.exception.CsvImportException import CsvImportException
 
 
 class Inspiration:
@@ -22,7 +23,7 @@ class Inspiration:
        __output_dir: str
            The path of the directory where the output fill will be generated.
        nrecords: int
-           The amount of records for the breathing_rate.
+           The amount of records for the inspiration.
        inspiration : dict
            The breathing_rate data as {timecode, record}
 
@@ -59,7 +60,7 @@ class Inspiration:
 
     def export_csv(self):
         """
-        Export the breathing_rate and breathing_rate_quality to a CSV file.
+        Export the inspiration and breathing_rate_quality to a CSV file.
         """
         # Create the directory if needed
         if not os.path.isdir(self.__output_dir):

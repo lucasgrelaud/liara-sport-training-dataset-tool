@@ -1,11 +1,11 @@
-import os
 import csv
-
+import os
 from datetime import datetime
 from datetime import timedelta
+
 from scipy.io import wavfile
-from .exception.WavImportException import WavImportException
-from .exception.CsvImportException import CsvImportException
+
+from hexoskin.standardize.exception.WavImportException import WavImportException
 
 
 class Respiration:
@@ -34,7 +34,7 @@ class Respiration:
     __file2_raw_data : list
         The data stored in the file.
     nrecords: int
-        The amount of records for the breathing_rate.
+        The amount of records for the respiration.
     duration: int
         The duration of the records.
     respiration_abdominal: dict
@@ -89,7 +89,7 @@ class Respiration:
                                      + '" has been corrupted and cannot be read.')
 
         if not self.__file1_sampling_rate and not self.__file2_sampling_rate:
-            raise CsvImportException('The Respiration Object can\'t be initialized because all the related'
+            raise WavImportException('The Respiration Object can\'t be initialized because all the related'
                                      'files are missing or corrupted.')
 
         if self.__file1_sampling_rate:

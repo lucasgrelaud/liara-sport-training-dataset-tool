@@ -1,12 +1,11 @@
 import csv
 import os
-
 from datetime import datetime
 from datetime import timedelta
 
 from scipy.io import wavfile
 
-from .exception.WavImportException import WavImportException
+from hexoskin.standardize.exception.WavImportException import WavImportException
 
 
 class BreathingRate:

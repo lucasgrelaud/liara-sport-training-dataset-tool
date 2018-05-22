@@ -3,14 +3,14 @@ import os
 
 from termcolor import colored
 
+from hexoskin.standardize.exception import WavImportException
+from hexoskin.standardize.exception.CsvImportException import CsvImportException
 from .BreathingRate import BreathingRate
 from .Expiration import Expiration
 from .Inspiration import Inspiration
 from .MinuteVentilation import MinuteVentilation
 from .Respiration import Respiration
 from .TidalVolume import TidalVolume
-from .exception import WavImportException
-from .exception.CsvImportException import CsvImportException
 
 
 class Breathing:
@@ -124,4 +124,5 @@ class Breathing:
 
         if self.tidal_volume:
             self.tidal_volume.export_csv()
-        print(colored('The breathing related data are exported in csv in the folder {}.', 'green'))
+        print(colored('The breathing related data are exported in csv in the folder "{}".'.format(self.__output_dir)
+                      , 'green'))

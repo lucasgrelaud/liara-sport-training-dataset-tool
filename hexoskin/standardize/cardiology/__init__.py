@@ -1,3 +1,2 @@
-from .ECG import ECG
 from .Cardiology import Cardiology
-from .exception import *
+from .ECG import ECG

@@ -5,13 +5,13 @@ from datetime import timedelta
 
 from scipy.io import wavfile
 
-from .exception.WavImportException import WavImportException
-from .exception.CsvImportException import CsvImportException
+from hexoskin.standardize.exception.CsvImportException import CsvImportException
+from hexoskin.standardize.exception.WavImportException import WavImportException
 
 
 class TidalVolume:
     """
-    Object that represent the breathing rate data of the test subject.
+    Object that represent the tidal volume data of the test subject.
 
     Parameters
     ----------
@@ -35,7 +35,7 @@ class TidalVolume:
     __file2_raw_data : list
         The data stored in the file.
     nrecords: int
-        The amount of records for the breathing_rate.
+        The amount of records for the tidal volume.
     duration: int
         The duration of the records.
     tidal_volume: dict
