@@ -1,4 +1,0 @@
-# Application dependencies to install
-numpy
-scipy
-termcolor

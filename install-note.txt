@@ -1,0 +1,4 @@
+For ub  ubuntu:
+    - list=$(apt-cache --names-only search ^gstreamer1.0-* | awk '{ print $1 }' | grep -v gstreamer1.0-python3-dbg-plugin-loader)
+    sudo apt-get install $list
+    sudo apt install python3-pyqt5*
