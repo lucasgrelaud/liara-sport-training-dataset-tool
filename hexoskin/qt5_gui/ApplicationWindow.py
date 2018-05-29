@@ -1,13 +1,17 @@
-import sys
 from PyQt5.QtWidgets import QMainWindow
-from PyQt5.QtWidgets import QVBoxLayout
-from PyQt5.QtWidgets import QHBoxLayout
-from .VideoWidget import VideoWidget
+
+from hexoskin.qt5_gui.sync_feeds.SyncFeeds import SyncFeedsWidget
+
+from hexoskin.qt5_gui.SharedData import SharedData
 
 
 class ApplicationWindow(QMainWindow):
     def __init__(self, parent=None):
         super(ApplicationWindow, self).__init__(parent)
+        self.shared_data = SharedData()
+
+        self.sync_feeds_widget = None
+
         self.title = 'Hexoskin Analysis Tool'
         self.left = 0
         self.top = 0
@@ -22,5 +26,5 @@ class ApplicationWindow(QMainWindow):
         self.show()
 
     def create_layout(self):
-        video_widget = VideoWidget(self)
-        self.setCentralWidget(video_widget)
+        self.sync_feeds_widget = SyncFeedsWidget(self, self.shared_data)
+        self.setCentralWidget(self.sync_feeds_widget)

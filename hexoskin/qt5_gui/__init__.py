@@ -1,2 +1,2 @@
 from .ApplicationWindow import ApplicationWindow
-from .VideoWidget import VideoWidget
+from hexoskin.qt5_gui.sync_feeds.VideoWidget import VideoWidget
