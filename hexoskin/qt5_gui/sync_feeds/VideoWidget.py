@@ -34,7 +34,6 @@ class VideoWidget(QWidget):
 
         # Add the object and data attributes.
         self.media_player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
-        self.file_path = ''
 
         # Add the video player
         video_player = QVideoWidget()
@@ -107,20 +106,20 @@ class VideoWidget(QWidget):
         self.media_player.error.connect(self.handle_error)
 
     def open_file_picker(self):
-        self.file_path, _ = QFileDialog.getOpenFileName(self, "Open video clip", QDir.homePath())
-        if self.file_path != '':
-            self.file_path_input.setText(self.file_path)
+        self.shared_data.video_path, _ = QFileDialog.getOpenFileName(self, "Open video clip", QDir.homePath())
+        if self.shared_data.video_path != '':
+            self.file_path_input.setText(self.shared_data.video_path)
             self.load_file_button.setEnabled(True)
 
     def manual_file_definition(self):
         if self.file_path_input.text() != '':
-            self.file_path = self.file_path_input.text()
+            self.shared_data.video_path = self.file_path_input.text()
             self.load_file_button.setEnabled(True)
 
     def load_file(self):
-        if self.file_path != '':
+        if self.shared_data.video_path != '':
             self.media_player.setMedia(
-                QMediaContent(QUrl.fromLocalFile(self.file_path)))
+                QMediaContent(QUrl.fromLocalFile(self.shared_data.video_path)))
             self.play_button.setEnabled(True)
 
     def play(self):
