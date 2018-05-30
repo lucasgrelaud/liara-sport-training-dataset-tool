@@ -123,6 +123,17 @@ class HearRate:
                 self.heart_rate_quality[timecode.strftime('%H:%M:%S:%f')] = record
                 timecode = timecode + delta
 
+    def set_output_dir(self, dir_path):
+        """
+        Set the output_dir after the initialisation of the object
+
+        Parameters
+        ----------
+        dir_path : str
+            The path of the directory where the output fill will be generated.
+        """
+        self.__output_dir = dir_path
+
     def export_csv(self):
         """
         Export the standardized data of the related objects to a CSV file.

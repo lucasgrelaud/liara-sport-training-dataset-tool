@@ -88,6 +88,22 @@ class Moves:
 
         print(colored('The moves related data are imported.', 'green'))
 
+    def update_output_dir(self, dir_path):
+        if self.accelerometer:
+            self.accelerometer.set_output_dir(dir_path)
+
+        if self.activity:
+            self.activity.set_output_dir(dir_path)
+
+        if self.cadence:
+            self.cadence.set_output_dir(dir_path)
+
+        if self.device_position:
+            self.device_position.set_output_dir(dir_path)
+
+        if self.step:
+            self.step.set_output_dir(dir_path)
+
     def export_all(self):
         """
         Export the standardized data of the related objects to a CSV file.

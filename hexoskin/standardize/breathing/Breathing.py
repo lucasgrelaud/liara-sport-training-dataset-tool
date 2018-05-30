@@ -103,6 +103,26 @@ class Breathing:
 
         print(colored('The breathing related data are imported.', 'green'))
 
+    def update_output_dir(self, dir_path):
+        if self.breathing_rate:
+            self.breathing_rate.set_output_dir(dir_path)
+
+        if self.expiration:
+            self.expiration.set_output_dir(dir_path)
+
+        if self.inspiration:
+            self.inspiration.set_output_dir(dir_path)
+
+        if self.minute_ventilation:
+            self.minute_ventilation.set_output_dir(dir_path)
+
+        if self.respiration:
+            self.respiration.set_output_dir(dir_path)
+
+        if self.tidal_volume:
+            self.tidal_volume.set_output_dir(dir_path)
+
+
     def export_all_csv(self):
         """
         Export the standardized data of the related objects to a CSV file.

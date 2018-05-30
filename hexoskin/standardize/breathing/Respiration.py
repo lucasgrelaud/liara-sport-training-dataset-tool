@@ -119,6 +119,17 @@ class Respiration:
                 self.respiration_thoracic[timecode.strftime('%H:%M:%S:%f')] = record
                 timecode = timecode + delta
 
+    def set_output_dir(self, dir_path):
+        """
+        Set the output_dir after the initialisation of the object
+
+        Parameters
+        ----------
+        dir_path : str
+            The path of the directory where the output fill will be generated.
+        """
+        self.__output_dir = dir_path
+
     def export_csv(self):
         """
         Export the respiration_abdominal and respiration_thoracic_quality to a CSV file.

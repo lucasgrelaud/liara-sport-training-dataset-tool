@@ -51,6 +51,16 @@ class Step:
             raise CsvImportException('ERROR : The file "{}/step.csv" can\'t be found.'
                                      .format(self.__input_dir))
 
+    def set_output_dir(self, dir_path):
+        """
+        Set the output_dir after the initialisation of the object
+
+        Parameters
+        ----------
+        dir_path : str
+            The path of the directory where the output fill will be generated.
+        """
+        self.__output_dir = dir_path
 
     def export_csv(self):
         """

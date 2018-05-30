@@ -71,6 +71,17 @@ class RRInterval:
             raise CsvImportException('ERROR : The file "{}/RR_interval_quality.csv" can\'t be found.'
                                      .format(self.__input_dir))
 
+    def set_output_dir(self, dir_path):
+        """
+        Set the output_dir after the initialisation of the object
+
+        Parameters
+        ----------
+        dir_path : str
+            The path of the directory where the output fill will be generated.
+        """
+        self.__output_dir = dir_path
+
     def export_csv(self):
         """
         Export the breathing_rate and breathing_rate_quality to a CSV file.

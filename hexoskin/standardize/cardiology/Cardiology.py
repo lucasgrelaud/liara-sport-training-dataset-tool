@@ -70,6 +70,16 @@ class Cardiology:
 
         print(colored('The cardiology related data are imported.', 'green'))
 
+    def update_output_dir(self, dir_path):
+        if self.ecg:
+            self.ecg.set_output_dir(dir_path)
+
+        if self.heart_rate:
+            self.heart_rate.set_output_dir(dir_path)
+
+        if self.RR_interval:
+            self.RR_interval.set_output_dir(dir_path)
+
     def export_all_csv(self):
         """
         Export the standardized data of the related objects to a CSV file.
