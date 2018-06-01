@@ -66,6 +66,20 @@ class Accelerometer:
         if not self.__is_fully_initialized():
             print(colored('WARNING : The accelerometer data are partials', 'yellow'))
 
+        if self.x_axis:
+            self.duration = self.x_axis.duration
+        elif self.y_axis:
+            self.duration = self.y_axis.duration
+        else:
+            self.duration = self.z_axis.duration
+
+        if self.x_axis:
+            self.rate = self.x_axis.rate
+        elif self.y_axis:
+            self.rate = self.y_axis.rate
+        else:
+            self.z_axis = self.z_axis.rate
+
     def __is_fully_initialized(self):
         return self.x_axis is not None \
                and self.y_axis is not None \
@@ -81,7 +95,6 @@ class Accelerometer:
             The path of the directory where the output fill will be generated.
         """
         self.__output_dir = dir_path
-
     def export_csv(self):
         # Create the directory if needed
         if not os.path.isdir(self.__output_dir):

@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QSizePolicy
 from PyQt5.QtWidgets import QHBoxLayout
 from PyQt5.QtWidgets import QVBoxLayout
 
@@ -12,16 +13,21 @@ class SyncFeedsWidget(QWidget):
         super(SyncFeedsWidget, self).__init__(parent)
         self.shared_data = shared_data
 
+        self.main = QVBoxLayout()
+        self.h_box = QHBoxLayout()
+
         self.video_widget = VideoWidget(self, self.shared_data)
         self.side_bar_widget = SideBarWidget(self, self.shared_data)
         self.data_widget = DataWidget(self, shared_data)
 
-        self.main = QVBoxLayout()
         self.main.addWidget(self.video_widget)
         self.main.addWidget(self.data_widget)
+        self.main.setStretchFactor(self.video_widget, 1)
+        self.main.setStretchFactor(self.data_widget, 1)
 
-        self.h_box = QHBoxLayout()
         self.h_box.addLayout(self.main)
         self.h_box.addWidget(self.side_bar_widget)
+        self.h_box.setStretchFactor(self.main, 4)
+        self.h_box.setStretchFactor(self.side_bar_widget, 1)
 
         self.setLayout(self.h_box)

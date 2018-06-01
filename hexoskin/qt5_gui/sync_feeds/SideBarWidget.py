@@ -17,6 +17,7 @@ class SideBarWidget(QWidget):
         self.video_sync_value = QLineEdit()
         self.video_sync_value.setReadOnly(True)
         self.video_sync_value.setText('HH:SS:MM:zzz')
+        self.video_sync_value.setMaximumWidth(300)
 
         self.data_sync_label = QLabel()
         self.data_sync_label.setText("Data Sync Timecode")
@@ -24,6 +25,7 @@ class SideBarWidget(QWidget):
         self.data_sync_value = QLineEdit()
         self.data_sync_value.setReadOnly(True)
         self.data_sync_value.setText('HH:SS:MM:zzz')
+        self.data_sync_value.setMaximumWidth(300)
 
         self.v_layout = QVBoxLayout()
         self.v_layout.setSpacing(10)
@@ -34,8 +36,7 @@ class SideBarWidget(QWidget):
         self.v_layout.addStretch(1)
 
         self.setLayout(self.v_layout)
-        self.setMinimumWidth(200)
-        self.setMaximumWidth(300)
 
     def update_sync_value(self):
         self.video_sync_value.setText(self.shared_data.video_sync)
+        self.data_sync_value.setText(self.shared_data.data_sync)

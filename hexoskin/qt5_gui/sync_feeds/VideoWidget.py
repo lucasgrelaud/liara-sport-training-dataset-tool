@@ -31,13 +31,14 @@ class VideoWidget(QWidget):
     def __init__(self, parent, shared_data):
         super(VideoWidget, self).__init__(parent)
         self.shared_data = shared_data
+        self.shared_data.video_sync = 'HH:SS:MM:zzz'
+        self.shared_data.update.emit()
 
         # Add the object and data attributes.
         self.media_player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
 
         # Add the video player
         video_player = QVideoWidget()
-        video_player.setMaximumWidth(self.maximumWidth())
 
         # Add the file selection controls
         self.file_picker_button = QPushButton()
@@ -69,7 +70,8 @@ class VideoWidget(QWidget):
         self.time_code.setText('HH:SS:MM:zzz / HH:SS:MM:zzz')
 
         self.sync_button = QPushButton()
-        self.sync_button.setText('Place Sync mark')
+        self.sync_button.setEnabled(False)
+        self.sync_button.setText('Set sync time')
         self.sync_button.clicked.connect(self.sync_video)
 
         self.error_label = QLabel()
@@ -121,6 +123,7 @@ class VideoWidget(QWidget):
             self.media_player.setMedia(
                 QMediaContent(QUrl.fromLocalFile(self.shared_data.video_path)))
             self.play_button.setEnabled(True)
+            self.sync_button.setEnabled(True)
 
     def play(self):
         if self.media_player.state() == QMediaPlayer.PlayingState:

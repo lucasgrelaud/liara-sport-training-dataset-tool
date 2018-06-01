@@ -104,6 +104,7 @@ class Moves:
         if self.step:
             self.step.set_output_dir(dir_path)
 
+
     def export_all(self):
         """
         Export the standardized data of the related objects to a CSV file.

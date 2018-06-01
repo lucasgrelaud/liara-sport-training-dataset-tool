@@ -32,7 +32,7 @@ class AccelerometerAxis:
     def __init__(self, axis, file_path):
         # Try to import the data from a specific WAV file
         try:
-            self._rate, self.__raw_data = wavfile.read(file_path)
+            self.rate, self.__raw_data = wavfile.read(file_path)
         except FileNotFoundError:
             raise WavImportException('ERROR : The file "{}" can\'t be found.'.format(file_path))
         except ValueError:
@@ -41,16 +41,22 @@ class AccelerometerAxis:
 
         self.__axis_raw_data = axis
         self.nrecords = self.__raw_data.size
-        self.duration = self.__raw_data.size / self._rate
+        self.duration = self.__raw_data.size / self.rate
         self.axis = {}
         self.__standardize()
+
+    def values(self):
+        return self.axis.values()
+
+    def timecodes(self):
+        return self.axis.keys()
 
     def __standardize(self):
         """
         Standardize the imported data and add the timecode.
         """
         timecode = datetime(1970, 1, 1, 0, 0, 0, 0)
-        delta = timedelta(microseconds=(1 / self._rate) * 1000000)
+        delta = timedelta(microseconds=(1 / self.rate) * 1000000)
 
         for record in self.__raw_data:
             self.axis[timecode.strftime('%H:%M:%S:%f')] = record
