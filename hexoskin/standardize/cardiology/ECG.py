@@ -132,17 +132,20 @@ class ECG:
 
         if self.__file1_sampling_rate:
             for record in self.__file1_raw_data:
-                self.ecg1[timecode.strftime('%H:%M:%S:%f')] = record
+                key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
+                self.ecg1[key] = record
                 timecode = timecode + delta
         timecode = datetime(1970, 1, 1, 0, 0, 0, 0)
         if self.__file2_sampling_rate:
             for record in self.__file2_raw_data:
-                self.ecg2[timecode.strftime('%H:%M:%S:%f')] = record
+                key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
+                self.ecg2[key] = record
                 timecode = timecode + delta
         timecode = datetime(1970, 1, 1, 0, 0, 0, 0)
         if self.__file3_sampling_rate:
             for record in self.__file3_raw_data:
-                self.ecg3[timecode.strftime('%H:%M:%S:%f')] = record
+                key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
+                self.ecg3[key] = record
                 timecode = timecode + delta
 
     def set_output_dir(self, dir_path):

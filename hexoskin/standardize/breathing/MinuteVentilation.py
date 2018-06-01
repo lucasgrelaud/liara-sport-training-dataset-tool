@@ -111,12 +111,14 @@ class MinuteVentilation:
 
         if self.__file1_sampling_rate:
             for record in self.__file1_raw_data:
-                self.minute_ventilation[timecode.strftime('%H:%M:%S:%f')] = record
+                key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
+                self.minute_ventilation[key] = record
                 timecode = timecode + delta
         timecode = datetime(1970, 1, 1, 0, 0, 0, 0)
         if self.__file2_sampling_rate:
             for record in self.__file2_raw_data:
-                self.minute_ventilation_quality[timecode.strftime('%H:%M:%S:%f')] = record
+                key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
+                self.minute_ventilation_quality[key] = record
                 timecode = timecode + delta
 
     def set_output_dir(self, dir_path):

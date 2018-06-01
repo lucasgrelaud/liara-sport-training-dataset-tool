@@ -77,7 +77,8 @@ class Cadence:
         delta = timedelta(microseconds=(1 / self.__file1_sampling_rate) * 1000000)
 
         for record in self.__file1_raw_data:
-            self.cadence[timecode.strftime('%H:%M:%S:%f')] = record
+            key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
+            self.cadence[key] = record
             timecode = timecode + delta
 
     def set_output_dir(self, dir_path):

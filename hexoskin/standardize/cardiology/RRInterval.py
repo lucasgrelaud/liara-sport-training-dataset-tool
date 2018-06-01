@@ -55,7 +55,8 @@ class RRInterval:
                 filereader.__next__()
                 for row in filereader:
                     timecode = datetime.utcfromtimestamp(float(row[0]))
-                    self.RR_interval[timecode.strftime('%H:%M:%S:%f')] = row[1]
+                    key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
+                    self.RR_interval[key] = row[1]
         except FileNotFoundError:
             raise CsvImportException('ERROR : The file "{}/RR_interval.csv" can\'t be found.'
                                      .format(self.__input_dir))
@@ -66,7 +67,8 @@ class RRInterval:
                 filereader.__next__()
                 for row in filereader:
                     timecode = datetime.utcfromtimestamp(float(row[0]))
-                    self.RR_interval_quality[timecode.strftime('%H:%M:%S:%f')] = row[1]
+                    key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
+                    self.RR_interval_quality[key] = row[1]
         except FileNotFoundError:
             raise CsvImportException('ERROR : The file "{}/RR_interval_quality.csv" can\'t be found.'
                                      .format(self.__input_dir))

@@ -46,7 +46,8 @@ class Step:
                 filereader.__next__()
                 for row in filereader:
                     timecode = datetime.utcfromtimestamp(float(row[0]))
-                    self.step[timecode.strftime('%H:%M:%S:%f')] = row[1]
+                    key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
+                    self.step[key] = row[1]
         except FileNotFoundError:
             raise CsvImportException('ERROR : The file "{}/step.csv" can\'t be found.'
                                      .format(self.__input_dir))

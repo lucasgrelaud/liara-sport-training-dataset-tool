@@ -59,5 +59,6 @@ class AccelerometerAxis:
         delta = timedelta(microseconds=(1 / self.rate) * 1000000)
 
         for record in self.__raw_data:
-            self.axis[timecode.strftime('%H:%M:%S:%f')] = record
+            key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
+            self.axis[key] = record
             timecode = timecode + delta

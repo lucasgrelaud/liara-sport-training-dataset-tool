@@ -52,7 +52,8 @@ class Inspiration:
                 filereader.__next__()
                 for row in filereader:
                     timecode = datetime.utcfromtimestamp(float(row[0]))
-                    self.inspiration[timecode.strftime('%H:%M:%S:%f')] = row[1]
+                    key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
+                    self.inspiration[key] = row[1]
             self.nrecords = len(self.inspiration)
         except FileNotFoundError:
             raise CsvImportException('ERROR : The file "{}/inspiration.csv" can\'t be found.'
