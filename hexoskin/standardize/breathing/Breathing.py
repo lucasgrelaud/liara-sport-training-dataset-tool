@@ -53,13 +53,13 @@ class Breathing:
 
     def __init__(self, input_dir: str, output_dir: str):
         self.__input_dir = input_dir
-        self.__output_dir = output_dir + '/standardize'
+        self.__output_dir = output_dir + os.path.sep + 'standardize'
 
         # Create the output directory if needed
         if not os.path.isdir(self.__output_dir):
             os.mkdir(self.__output_dir)
             print('Create the output directory : "{}".'.format(self.__output_dir))
-        self.__output_dir += '/breathing'
+        self.__output_dir += os.path.sep + 'breathing'
         if not os.path.isdir(self.__output_dir):
             os.mkdir(self.__output_dir)
             print('Create the output directory : "{}".'.format(self.__output_dir))

@@ -40,13 +40,13 @@ class Cardiology:
 
     def __init__(self, input_dir, output_dir):
         self.__input_dir = input_dir
-        self.__output_dir = output_dir + '/standardize'
+        self.__output_dir = output_dir + os.path.sep + 'standardize'
 
         # Create the directory if needed
         if not os.path.isdir(self.__output_dir):
             os.mkdir(self.__output_dir)
             print('Create the output directory : "{}".'.format(self.__output_dir))
-        self.__output_dir += '/cardiology'
+        self.__output_dir += os.path.sep + 'cardiology'
         if not os.path.isdir(self.__output_dir):
             os.mkdir(self.__output_dir)
             print('Create the output directory : "{}".'.format(self.__output_dir))
