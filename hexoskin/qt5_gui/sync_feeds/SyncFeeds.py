@@ -27,7 +27,7 @@ class SyncFeedsWidget(QWidget):
 
         self.h_box.addLayout(self.main)
         self.h_box.addWidget(self.side_bar_widget)
-        self.h_box.setStretchFactor(self.main, 4)
+        self.h_box.setStretchFactor(self.main, 3)
         self.h_box.setStretchFactor(self.side_bar_widget, 1)
 
         self.setLayout(self.h_box)

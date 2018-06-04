@@ -24,7 +24,7 @@ class DataWidget(QWidget):
         super(DataWidget, self).__init__(parent)
         self.shared_data = shared_data
         self.shared_data.data_sync = 'HH:SS:MM:zzz'
-        self.shared_data.update.emit()
+        self.shared_data.update_sync.emit()
 
         # Add the file selection controls
         self.dir_picker_button = QPushButton()
@@ -52,7 +52,7 @@ class DataWidget(QWidget):
         self.sync_time_button = QPushButton()
         self.sync_time_button.setText('Set sync time')
         self.sync_time_button.setEnabled(False)
-        self.sync_time_button.clicked.connect(self.sync_date)
+        self.sync_time_button.clicked.connect(self.sync_data)
 
         # Create the layout for the file controls
         dir_layout = QHBoxLayout()
@@ -109,7 +109,7 @@ class DataWidget(QWidget):
         self.z_axis_item.setLabel('Zaxis', color="#3498db")
 
         self.plot_item_viewbox.sigResized.connect(self.update_views)
-        self.x_axis_viewbox.enableAutoRange(axis=ViewBox.XAxis,enable=True)
+        self.x_axis_viewbox.enableAutoRange(axis=ViewBox.XAxis, enable=True)
         self.y_axis_viewbox.enableAutoRange(axis=ViewBox.XAxis, enable=True)
         self.z_axis_viewbox.enableAutoRange(axis=ViewBox.XAxis, enable=True)
 
@@ -172,6 +172,6 @@ class DataWidget(QWidget):
 
         return ticks
 
-    def sync_date(self):
-        self.shared_data.data_start_sync = self.sync_time_edit.text()
-        self.shared_data.update.emit()
+    def sync_data(self):
+        self.shared_data.data_sync = self.sync_time_edit.text()
+        self.shared_data.update_sync.emit()

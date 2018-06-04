@@ -7,7 +7,8 @@ from hexoskin.standardize.cardiology import Cardiology
 from hexoskin.standardize.moves import Moves
 
 class SharedData(QObject):
-    update = pyqtSignal()
+    update_sync = pyqtSignal()
+    update_tags = pyqtSignal(str)
 
     def __init__(self):
         QObject.__init__(self)
@@ -20,6 +21,8 @@ class SharedData(QObject):
         self.breathing = None
         self.cardiology = None
         self.moves = None
+
+        self.tags = dict()
 
     def init_data(self):
         self.breathing = Breathing(self.data_dir, QDir.tempPath())
