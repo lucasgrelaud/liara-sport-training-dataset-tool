@@ -4,6 +4,6 @@ from .SharedData import SharedData
 from hexoskin.qt5_gui.sync_feeds.VideoWidget import VideoWidget
 from hexoskin.qt5_gui.sync_feeds.DataWidget import DataWidget
 from hexoskin.qt5_gui.sync_feeds.SideBarWidget import SideBarWidget
-from hexoskin.qt5_gui.sync_feeds.SyncFeeds import SyncFeedsWidget
+from hexoskin.qt5_gui.sync_feeds.SyncFeedsInterface import SyncFeedsInterface
 
 from .app_config import *

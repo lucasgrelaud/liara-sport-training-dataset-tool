@@ -27,9 +27,9 @@ class VideoPlayerWidget(QWidget):
     error = pyqtSignal(str)
     file_loaded = pyqtSignal()
 
-    def __init__(self, parent):
+    def __init__(self, parent, shared_data):
         super(VideoPlayerWidget, self).__init__(parent)
-
+        self.shared_data = shared_data
         # Create the video elements
         self.__media_player = QMediaPlayer(self, QMediaPlayer.VideoSurface)
         self.__video_item = QGraphicsVideoItem()
@@ -115,9 +115,10 @@ class VideoPlayerWidget(QWidget):
         file_dialog.setFileMode(QFileDialog.ExistingFile)
         file_dialog.setDirectory(QStandardPaths.standardLocations(QStandardPaths.MoviesLocation)[0])
         if file_dialog.exec() == QDialog.Accepted:
-            self.__load_video(file_dialog.selectedUrls()[0])
+            self.shared_data.video_path = file_dialog.selectedUrls()[0]
+            self.load_video(file_dialog.selectedUrls()[0])
 
-    def __load_video(self, url):
+    def load_video(self, url):
         self.__media_player.setMedia(QMediaContent(url))
         self.__play_button.setEnabled(True)
         self.__stop_button.setEnabled(True)

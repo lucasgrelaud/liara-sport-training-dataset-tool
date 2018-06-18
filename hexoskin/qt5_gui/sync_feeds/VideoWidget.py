@@ -20,7 +20,7 @@ class VideoWidget(QWidget):
         self.shared_data.update_sync.connect(self.update_sync)
 
         # Add the video player
-        self.video_player = VideoPlayerWidget(self)
+        self.video_player = VideoPlayerWidget(self, shared_data)
         self.video_player.error.connect(self.handle_error)
         self.video_player.file_loaded.connect(self.file_loaded)
 
@@ -65,12 +65,13 @@ class VideoWidget(QWidget):
 
         self.setLayout(widget_layout)
 
+        self.restore_state()
+
     def handle_error(self, error):
         print(error)
 
     def file_loaded(self):
         self.video_sync_button.setEnabled(True)
-        self.shared_data.video_sync = 'HH:SS:MM:zzz'
         self.shared_data.update_sync.emit()
 
     def video_sync(self):
@@ -118,3 +119,11 @@ class VideoWidget(QWidget):
         timecode += time_delta
         self.shared_data.update_tags.emit('add', timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000)),
                                           'Other')
+
+    def restore_state(self):
+        if self.shared_data.video_path is not None:
+            self.video_player.load_video(self.shared_data.video_path)
+        if self.shared_data.video_sync != 'HH:SS:MM:zzz' and self.shared_data.data_sync != 'HH:SS:MM:zzz' :
+            self.tags_combobox.setEnabled(True)
+            self.tags_button.setEnabled(True)
+            self.tags_other_button.setEnabled(True)

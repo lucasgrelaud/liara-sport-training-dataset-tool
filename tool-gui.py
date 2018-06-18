@@ -5,8 +5,8 @@ from PyQt5.QtGui import QIcon
 from hexoskin.qt5_gui import ApplicationWindow
 
 
-def main():
-    app = QApplication(sys.argv)
+def main(args):
+    app = QApplication(args)
     scriptDir = os.path.dirname(os.path.realpath(__file__))
     appwindow = ApplicationWindow()
     appwindow.setWindowIcon(QIcon(scriptDir + os.path.sep + 'logo-hexoskin.jpg'))
@@ -14,4 +14,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv)

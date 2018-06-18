@@ -23,7 +23,6 @@ class DataWidget(QWidget):
     def __init__(self, parent, shared_data):
         super(DataWidget, self).__init__(parent)
         self.shared_data = shared_data
-        self.shared_data.data_sync = 'HH:SS:MM:zzz'
         self.shared_data.update_sync.emit()
 
         # Add the file selection controls
@@ -107,13 +106,15 @@ class DataWidget(QWidget):
 
         self.setLayout(self.v_box)
 
+        self.restore_state()
+
     def open_dir_picker(self):
         self.shared_data.data_dir = QFileDialog.getExistingDirectory(self, 'Open the Hexoskin data directory',
                                                                      QDir.homePath())
         if self.shared_data.data_dir != '':
-            self.load_file()
+            self.load_files()
 
-    def load_file(self):
+    def load_files(self):
         if self.shared_data.data_dir != '':
             self.shared_data.init_data()
             timecodes = list(self.shared_data.moves.accelerometer.x_axis.timecodes())
@@ -155,3 +156,12 @@ class DataWidget(QWidget):
     def sync_data(self):
         self.shared_data.data_sync = self.sync_time_edit.text()
         self.shared_data.update_sync.emit()
+
+    def restore_state(self):
+        if self.shared_data.data_dir is not None:
+            self.load_files()
+        if self.shared_data.data_sync != 'HH:SS:MM:zzz':
+            text_time = self.shared_data.data_sync.split(':')
+            time = QTime()
+            time.setHMS(int(text_time[0]), int(text_time[1]), int(text_time[2]), int(text_time[3]))
+            self.sync_time_edit.setTime(time)

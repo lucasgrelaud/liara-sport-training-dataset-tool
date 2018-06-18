@@ -70,6 +70,8 @@ class SideBarWidget(QWidget):
 
         self.setLayout(self.widget_layout)
 
+        self.restore_state()
+
     def update_sync_value(self):
         self.video_sync_value.setText(self.shared_data.video_sync)
         self.data_sync_value.setText(self.shared_data.data_sync)
@@ -95,3 +97,13 @@ class SideBarWidget(QWidget):
             self.tags_delete_button.setEnabled(False)
         else:
             self.tags_delete_button.setEnabled(True)
+
+    def restore_state(self):
+        if self.shared_data.video_sync != 'HH:SS:MM:zzz' or self.shared_data.data_sync != 'HH:SS:MM:zzz':
+            self.update_sync_value()
+
+        if len(self.shared_data.tags) != 0:
+            for key, value in self.shared_data.tags.items():
+                self.tags_table.setItem(self.tags_table.rowCount() - 1, 0, QTableWidgetItem(key))
+                self.tags_table.setItem(self.tags_table.rowCount() - 1, 1, QTableWidgetItem(value))
+                self.tags_table.insertRow(self.tags_table.rowCount())
