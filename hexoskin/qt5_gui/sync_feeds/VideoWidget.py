@@ -44,10 +44,18 @@ class VideoWidget(QWidget):
         self.tags_button.setToolTip("Add a tag to the list using the current timecode and selected tag in the list.")
         self.tags_button.setEnabled(False)
         self.tags_button.clicked.connect(self.add_tag)
+
+        self.tags_other_button = QPushButton()
+        self.tags_other_button.setText("Add 'Other' tag")
+        self.tags_other_button.setToolTip("Add a 'Other' tag to the list using the current timecode.")
+        self.tags_other_button.setEnabled(False)
+        self.tags_other_button.clicked.connect(self.add_other_tag)
+
         # Create the layouts
         bottom_control_layout = QHBoxLayout()
         bottom_control_layout.addWidget(self.tags_combobox)
         bottom_control_layout.addWidget(self.tags_button)
+        bottom_control_layout.addWidget(self.tags_other_button)
         bottom_control_layout.addStretch(1)
         bottom_control_layout.addWidget(self.video_sync_button)
 
@@ -73,9 +81,11 @@ class VideoWidget(QWidget):
         if self.shared_data.video_sync != 'HH:SS:MM:zzz' and self.shared_data.data_sync != 'HH:SS:MM:zzz':
             self.tags_combobox.setEnabled(True)
             self.tags_button.setEnabled(True)
+            self.tags_other_button.setEnabled(True)
         else:
             self.tags_combobox.setEnabled(False)
             self.tags_button.setEnabled(False)
+            self.tags_other_button.setEnabled(False)
 
     def add_tag(self):
         video_sync_array = self.shared_data.video_sync.split(':')
@@ -93,3 +103,18 @@ class VideoWidget(QWidget):
         self.shared_data.update_tags.emit('add', timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000)),
                                           self.tags_combobox.currentText())
 
+    def add_other_tag(self):
+        video_sync_array = self.shared_data.video_sync.split(':')
+        data_sync_array = self.shared_data.data_sync.split(':')
+        video_time = datetime(1970, 1, 1, int(video_sync_array[0]), int(video_sync_array[1]), int(video_sync_array[2]),
+                              int(video_sync_array[3]) * 1000)
+        data_time = datetime(1970, 1, 1, int(data_sync_array[0]), int(data_sync_array[1]), int(data_sync_array[2]),
+                             int(data_sync_array[3]) * 1000)
+        time_delta = video_time - data_time
+
+        timecode_array = self.video_player.current_timecode().split(":")
+        timecode = datetime(1970, 1, 1, int(timecode_array[0]), int(timecode_array[1]), int(timecode_array[2]),
+                            int(timecode_array[3]) * 1000)
+        timecode += time_delta
+        self.shared_data.update_tags.emit('add', timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000)),
+                                          'Other')

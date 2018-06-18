@@ -48,6 +48,8 @@ class SideBarWidget(QWidget):
         self.tags_table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.tags_table.setSelectionMode(QAbstractItemView.SingleSelection)
         self.tags_table.setShowGrid(True)
+        self.tags_table.setMinimumHeight(500)
+        self.tags_table.setMaximumHeight(600)
 
         self.tags_delete_button = QPushButton()
         self.tags_delete_button.setText('Delete tag')

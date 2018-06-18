@@ -29,17 +29,10 @@ class DataWidget(QWidget):
         # Add the file selection controls
         self.dir_picker_button = QPushButton()
         self.dir_picker_button.setEnabled(True)
+        self.dir_picker_button.setText("Load data")
         self.dir_picker_button.setIcon(self.style().standardIcon(QStyle.SP_DirIcon))
         self.dir_picker_button.setToolTip('Select the directory using the file explorer')
         self.dir_picker_button.clicked.connect(self.open_dir_picker)
-
-        self.dir_path_input = QLineEdit()
-        self.dir_path_input.setPlaceholderText('Path to hexoskin data directory.')
-        self.dir_path_input.textEdited.connect(self.manual_file_definition)
-
-        self.load_dir_button = QPushButton('Load data')
-        self.load_dir_button.setEnabled(False)
-        self.load_dir_button.clicked.connect(self.load_file)
 
         # Add the sync controls
         self.sync_time_label = QLabel()
@@ -50,7 +43,7 @@ class DataWidget(QWidget):
         self.sync_time_edit.setEnabled(False)
 
         self.sync_time_button = QPushButton()
-        self.sync_time_button.setText('Set sync time')
+        self.sync_time_button.setText('Sync data')
         self.sync_time_button.setEnabled(False)
         self.sync_time_button.clicked.connect(self.sync_data)
 
@@ -58,16 +51,10 @@ class DataWidget(QWidget):
         dir_layout = QHBoxLayout()
         dir_layout.setContentsMargins(0, 0, 0, 0)
         dir_layout.addWidget(self.dir_picker_button)
-        dir_layout.addWidget(self.dir_path_input)
-        dir_layout.addWidget(self.load_dir_button)
-
-        # Create the layout for the sync controls
-        sync_layout = QHBoxLayout()
-        sync_layout.setContentsMargins(0, 0, 0, 0)
-        sync_layout.addWidget(self.sync_time_label)
-        sync_layout.addWidget(self.sync_time_edit)
-        sync_layout.addWidget(self.sync_time_button)
-        sync_layout.addStretch(1)
+        dir_layout.addStretch(1)
+        dir_layout.addWidget(self.sync_time_label)
+        dir_layout.addWidget(self.sync_time_edit)
+        dir_layout.addWidget(self.sync_time_button)
 
         # Create the axis and their viewbox
         self.x_axis_item = AxisItem('left')
@@ -117,7 +104,6 @@ class DataWidget(QWidget):
         self.v_box = QVBoxLayout()
         self.v_box.addLayout(dir_layout)
         self.v_box.addWidget(self.graphic_view)
-        self.v_box.addLayout(sync_layout)
 
         self.setLayout(self.v_box)
 
@@ -125,13 +111,7 @@ class DataWidget(QWidget):
         self.shared_data.data_dir = QFileDialog.getExistingDirectory(self, 'Open the Hexoskin data directory',
                                                                      QDir.homePath())
         if self.shared_data.data_dir != '':
-            self.dir_path_input.setText(self.shared_data.data_dir)
-            self.load_dir_button.setEnabled(True)
-
-    def manual_file_definition(self):
-        if self.dir_path_input.text() != '':
-            self.shared_data.data_dir = self.dir_path_input.text()
-            self.load_dir_button.setEnabled(True)
+            self.load_file()
 
     def load_file(self):
         if self.shared_data.data_dir != '':
