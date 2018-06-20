@@ -43,7 +43,7 @@ class SideBarWidget(QWidget):
         self.tags_table.setColumnCount(2)
         self.tags_table.setHorizontalHeaderItem(0, QTableWidgetItem('TimeCode'))
         self.tags_table.setHorizontalHeaderItem(1, QTableWidgetItem('Tag'))
-        self.tags_table.verticalHeader().setVisible(False)
+        self.tags_table.verticalHeader().setVisible(True)
         self.tags_table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.tags_table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.tags_table.setSelectionMode(QAbstractItemView.SingleSelection)

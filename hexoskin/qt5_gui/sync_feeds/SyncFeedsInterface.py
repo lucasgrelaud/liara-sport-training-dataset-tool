@@ -9,7 +9,7 @@ from .DataWidget import DataWidget
 
 class SyncFeedsInterface(QWidget):
     def __init__(self, parent, shared_data):
-        super().__init__(parent)
+        super(SyncFeedsInterface, self).__init__(parent)
         self.shared_data = shared_data
 
         self.main = QVBoxLayout()
