@@ -129,8 +129,8 @@ class DataWidget(QWidget):
             self.x_axis_viewbox.addItem(PlotCurveItem(x, pen='#34495e'))
             self.y_axis_viewbox.addItem(PlotCurveItem(y, pen='#9b59b6'))
             self.z_axis_viewbox.addItem(PlotCurveItem(z, pen='#3498db'))
-            self.plot_item.getAxis('bottom').setTicks(self.generate_time_ticks(timecodes,
-                                                                               self.shared_data.moves.accelerometer.rate))
+            self.plot_item.getAxis('bottom').setTicks(
+                self.generate_time_ticks(timecodes,self.shared_data.moves.accelerometer.rate))
 
         self.update_views()
 
@@ -147,7 +147,7 @@ class DataWidget(QWidget):
             temp = list()
             i = step
             while i in range(len(timecodes)):
-                temp.append((i, timecodes[i]))
+                temp.append((i, timecodes[i].strftime('%H:%M:%S:') + str(int(timecodes[i].microsecond / 1000))))
                 i += step
             ticks.append(temp)
 

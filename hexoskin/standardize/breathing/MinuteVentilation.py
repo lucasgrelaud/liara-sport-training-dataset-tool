@@ -111,14 +111,12 @@ class MinuteVentilation:
 
         if self.__file1_sampling_rate:
             for record in self.__file1_raw_data:
-                key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
-                self.minute_ventilation[key] = record
+                self.minute_ventilation[timecode] = record
                 timecode = timecode + delta
         timecode = datetime(1970, 1, 1, 0, 0, 0, 0)
         if self.__file2_sampling_rate:
             for record in self.__file2_raw_data:
-                key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
-                self.minute_ventilation_quality[key] = record
+                self.minute_ventilation_quality[timecode] = record
                 timecode = timecode + delta
 
     def set_output_dir(self, dir_path):
@@ -147,7 +145,9 @@ class MinuteVentilation:
             filewriter.writerow(['TimeCode', 'MinuteVentilation(mL/min)', 'MinuteVentilationAdjusted(mL/min)'])
             if self.minute_ventilation:
                 for timecode in self.minute_ventilation.keys():
-                    filewriter.writerow([timecode, self.minute_ventilation.get(timecode), self.minute_ventilation_quality.get(timecode)])
+                    filewriter.writerow([timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000)),
+                                         self.minute_ventilation.get(timecode), self.minute_ventilation_quality.get(timecode)])
             else:
                 for timecode in self.minute_ventilation_quality.keys():
-                    filewriter.writerow([timecode, self.minute_ventilation.get(timecode), self.minute_ventilation_quality.get(timecode)])
+                    filewriter.writerow([timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000)),
+                                         self.minute_ventilation.get(timecode), self.minute_ventilation_quality.get(timecode)])

@@ -77,8 +77,7 @@ class Cadence:
         delta = timedelta(microseconds=(1 / self.__file1_sampling_rate) * 1000000)
 
         for record in self.__file1_raw_data:
-            key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
-            self.cadence[key] = record
+            self.cadence[timecode] = record
             timecode = timecode + delta
 
     def set_output_dir(self, dir_path):
@@ -106,4 +105,5 @@ class Cadence:
             filewriter = csv.writer(csvfile, dialect='excel')
             filewriter.writerow(['TimeCode', 'Cadence(Step/min)'])
             for timecode in self.cadence.keys():
-                filewriter.writerow([timecode, self.cadence.get(timecode)])
+                filewriter.writerow([timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000)),
+                                     self.cadence.get(timecode)])

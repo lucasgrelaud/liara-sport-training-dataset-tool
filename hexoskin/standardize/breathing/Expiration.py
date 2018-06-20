@@ -52,8 +52,7 @@ class Expiration:
                 filereader.__next__()
                 for row in filereader:
                     timecode = datetime.utcfromtimestamp(float(row[0]))
-                    key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
-                    self.expiration[key] = row[1]
+                    self.expiration[timecode] = row[1]
             self.nrecords = len(self.expiration)
         except FileNotFoundError:
             raise CsvImportException('ERROR : The file "{}/expiration.csv" can\'t be found.'
@@ -84,4 +83,5 @@ class Expiration:
             filewriter = csv.writer(csvfile, dialect='excel')
             filewriter.writerow(['TimeCode', 'Expiration'])
             for timecode in self.expiration.keys():
-                filewriter.writerow([timecode, self.expiration.get(timecode)])
+                filewriter.writerow([timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000)),
+                                     self.expiration.get(timecode)])

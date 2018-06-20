@@ -117,10 +117,13 @@ class Accelerometer:
             filewriter.writerow(['TimeCode', 'X(G)', 'Y(G)', 'Z(G)'])
             if x_data:
                 for timecode in x_data.keys():
-                    filewriter.writerow([timecode, x_data.get(timecode), y_data.get(timecode), z_data.get(timecode)])
+                    filewriter.writerow([timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000)),
+                                         x_data.get(timecode), y_data.get(timecode), z_data.get(timecode)])
             elif y_data:
                 for timecode in y_data.keys():
-                    filewriter.writerow([timecode, x_data.get(timecode), y_data.get(timecode), z_data.get(timecode)])
+                    filewriter.writerow([timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000)),
+                                         x_data.get(timecode), y_data.get(timecode), z_data.get(timecode)])
             else:
                 for timecode in z_data.keys():
-                    filewriter.writerow([timecode, x_data.get(timecode), y_data.get(timecode), z_data.get(timecode)])
+                    filewriter.writerow([timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000)),
+                                         x_data.get(timecode), y_data.get(timecode), z_data.get(timecode)])

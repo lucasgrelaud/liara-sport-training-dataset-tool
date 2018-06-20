@@ -110,15 +110,13 @@ class Respiration:
         delta = timedelta(microseconds=(1 / self.__file1_sampling_rate) * 1000000)
         if self.__file1_sampling_rate:
             for record in self.__file1_raw_data:
-                key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
-                self.respiration_abdominal[key] = record
+                self.respiration_abdominal[timecode] = record
                 timecode = timecode + delta
 
         timecode = datetime(1970, 1, 1, 0, 0, 0, 0)
         if self.__file2_sampling_rate:
             for record in self.__file2_raw_data:
-                key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
-                self.respiration_thoracic[key] = record
+                self.respiration_thoracic[timecode] = record
                 timecode = timecode + delta
 
     def set_output_dir(self, dir_path):
@@ -148,8 +146,10 @@ class Respiration:
             if self.respiration_abdominal:
                 for timecode in self.respiration_abdominal.keys():
                     filewriter.writerow(
-                        [timecode, self.respiration_abdominal.get(timecode), self.respiration_thoracic.get(timecode)])
+                        [timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000)),
+                         self.respiration_abdominal.get(timecode), self.respiration_thoracic.get(timecode)])
             else:
                 for timecode in self.respiration_thoracic.keys():
                     filewriter.writerow(
-                        [timecode, self.respiration_abdominal.get(timecode), self.respiration_thoracic.get(timecode)])
+                        [timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000)),
+                         self.respiration_abdominal.get(timecode), self.respiration_thoracic.get(timecode)])

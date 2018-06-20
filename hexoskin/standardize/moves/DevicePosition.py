@@ -56,8 +56,7 @@ class DevicePosition:
                 filereader.__next__()
                 for row in filereader:
                     timecode = datetime.utcfromtimestamp(float(row[0]))
-                    key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
-                    self.device_position[key] = row[1]
+                    self.device_position[timecode] = row[1]
         except FileNotFoundError:
             raise CsvImportException('ERROR : The file "{}/device_position.csv" can\'t be found.'
                                      .format(self.__input_dir))
@@ -87,4 +86,5 @@ class DevicePosition:
             filewriter = csv.writer(csvfile, dialect='excel')
             filewriter.writerow(['TimeCode', 'Position'])
             for timecode in self.device_position.keys():
-                filewriter.writerow([timecode, self.device_position.get(timecode)])
+                filewriter.writerow([timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000)),
+                                     self.device_position.get(timecode)])

@@ -6,6 +6,7 @@ from hexoskin.standardize.exception.CsvImportException import CsvImportException
 
 
 class RRInterval:
+    # TODO: Edit the import + exception
     """
        Object that represent the RR interval data of the test subject.
 
@@ -55,8 +56,7 @@ class RRInterval:
                 filereader.__next__()
                 for row in filereader:
                     timecode = datetime.utcfromtimestamp(float(row[0]))
-                    key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
-                    self.RR_interval[key] = row[1]
+                    self.RR_interval[timecode] = row[1]
         except FileNotFoundError:
             raise CsvImportException('ERROR : The file "{}/RR_interval.csv" can\'t be found.'
                                      .format(self.__input_dir))
@@ -67,8 +67,7 @@ class RRInterval:
                 filereader.__next__()
                 for row in filereader:
                     timecode = datetime.utcfromtimestamp(float(row[0]))
-                    key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
-                    self.RR_interval_quality[key] = row[1]
+                    self.RR_interval_quality[timecode] = row[1]
         except FileNotFoundError:
             raise CsvImportException('ERROR : The file "{}/RR_interval_quality.csv" can\'t be found.'
                                      .format(self.__input_dir))
@@ -98,4 +97,5 @@ class RRInterval:
             filewriter = csv.writer(csvfile, dialect='excel')
             filewriter.writerow(['TimeCode', 'RRInterval(sec)', 'Quality'])
             for timecode in self.RR_interval.keys():
-                filewriter.writerow([timecode, self.RR_interval.get(timecode), self.RR_interval_quality.get(timecode)])
+                filewriter.writerow([timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000)),
+                                     self.RR_interval.get(timecode), self.RR_interval_quality.get(timecode)])

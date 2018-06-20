@@ -132,20 +132,17 @@ class ECG:
 
         if self.__file1_sampling_rate:
             for record in self.__file1_raw_data:
-                key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
-                self.ecg1[key] = record
+                self.ecg1[timecode] = record
                 timecode = timecode + delta
         timecode = datetime(1970, 1, 1, 0, 0, 0, 0)
         if self.__file2_sampling_rate:
             for record in self.__file2_raw_data:
-                key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
-                self.ecg2[key] = record
+                self.ecg2[timecode] = record
                 timecode = timecode + delta
         timecode = datetime(1970, 1, 1, 0, 0, 0, 0)
         if self.__file3_sampling_rate:
             for record in self.__file3_raw_data:
-                key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
-                self.ecg3[key] = record
+                self.ecg3[timecode] = record
                 timecode = timecode + delta
 
     def set_output_dir(self, dir_path):
@@ -175,12 +172,15 @@ class ECG:
             if self.ecg1:
                 for timecode in self.ecg1.keys():
                     filewriter.writerow(
-                        [timecode, self.ecg1.get(timecode), self.ecg2.get(timecode), self.ecg3.get(timecode)])
+                        [timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000)),
+                         self.ecg1.get(timecode), self.ecg2.get(timecode), self.ecg3.get(timecode)])
             elif self.__file2_sampling_rate:
                 for timecode in self.ecg2.keys():
                     filewriter.writerow(
-                        [timecode, self.ecg1.get(timecode), self.ecg2.get(timecode), self.ecg3.get(timecode)])
+                        [timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000)),
+                         self.ecg1.get(timecode), self.ecg2.get(timecode), self.ecg3.get(timecode)])
             else:
                 for timecode in self.ecg3.keys():
                     filewriter.writerow(
-                        [timecode, self.ecg1.get(timecode), self.ecg2.get(timecode), self.ecg3.get(timecode)])
+                        [timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000)),
+                         self.ecg1.get(timecode), self.ecg2.get(timecode), self.ecg3.get(timecode)])

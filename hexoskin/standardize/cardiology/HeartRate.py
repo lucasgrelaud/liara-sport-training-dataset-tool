@@ -114,15 +114,13 @@ class HearRate:
         delta = timedelta(microseconds=(1 / self.__file1_sampling_rate) * 1000000)
         if self.__file1_sampling_rate:
             for record in self.__file1_raw_data:
-                key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
-                self.heart_rate[key] = record
+                self.heart_rate[timecode] = record
                 timecode = timecode + delta
 
         timecode = datetime(1970, 1, 1, 0, 0, 0, 0)
         if self.__file2_sampling_rate:
             for record in self.__file2_raw_data:
-                key = timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000))
-                self.heart_rate_quality[key] = record
+                self.heart_rate_quality[timecode] = record
                 timecode = timecode + delta
 
     def set_output_dir(self, dir_path):
@@ -152,8 +150,10 @@ class HearRate:
             if self.heart_rate:
                 for timecode in self.heart_rate.keys():
                     filewriter.writerow(
-                        [timecode, self.heart_rate.get(timecode), self.heart_rate_quality.get(timecode)])
+                        [timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000)),
+                         self.heart_rate.get(timecode), self.heart_rate_quality.get(timecode)])
             else:
                 for timecode in self.heart_rate_quality.keys():
                     filewriter.writerow(
-                        [timecode, self.heart_rate.get(timecode), self.heart_rate_quality.get(timecode)])
+                        [timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000)),
+                         self.heart_rate.get(timecode), self.heart_rate_quality.get(timecode)])
