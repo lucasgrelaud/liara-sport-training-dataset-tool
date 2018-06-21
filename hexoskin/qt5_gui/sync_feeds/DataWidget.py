@@ -117,18 +117,24 @@ class DataWidget(QWidget):
     def load_files(self):
         if self.shared_data.data_dir != '':
             self.shared_data.init_data()
-            timecodes = list(self.shared_data.moves.accelerometer.x_axis.timecodes())
-            x = list(self.shared_data.moves.accelerometer.x_axis.values())
-            y = list(self.shared_data.moves.accelerometer.y_axis.values())
-            z = list(self.shared_data.moves.accelerometer.z_axis.values())
-            self.sync_time_edit.setEnabled(True)
-            self.sync_time_button.setEnabled(True)
+
+            if self.shared_data.moves.accelerometer.x_axis is not None:
+                x = list(self.shared_data.moves.accelerometer.x_axis.values())
+                self.x_axis_viewbox.addItem(PlotCurveItem(x, pen='#34495e'))
+                timecodes = list(self.shared_data.moves.accelerometer.x_axis.timecodes())
+            if self.shared_data.moves.accelerometer.y_axis is not None:
+                y = list(self.shared_data.moves.accelerometer.y_axis.values())
+                self.y_axis_viewbox.addItem(PlotCurveItem(y, pen='#9b59b6'))
+                timecodes = list(self.shared_data.moves.accelerometer.y_axis.timecodes())
+            if self.shared_data.moves.accelerometer.z_axis is not None:
+                z = list(self.shared_data.moves.accelerometer.z_axis.values())
+                self.z_axis_viewbox.addItem(PlotCurveItem(z, pen='#3498db'))
+                timecodes = list(self.shared_data.moves.accelerometer.z_axis.timecodes())
 
             middle = [0] * len(timecodes)
             self.plot_item_viewbox.addItem(PlotCurveItem(middle,  pen='#000000'))
-            self.x_axis_viewbox.addItem(PlotCurveItem(x, pen='#34495e'))
-            self.y_axis_viewbox.addItem(PlotCurveItem(y, pen='#9b59b6'))
-            self.z_axis_viewbox.addItem(PlotCurveItem(z, pen='#3498db'))
+            self.sync_time_edit.setEnabled(True)
+            self.sync_time_button.setEnabled(True)
             self.plot_item.getAxis('bottom').setTicks(
                 self.generate_time_ticks(timecodes,self.shared_data.moves.accelerometer.rate))
 

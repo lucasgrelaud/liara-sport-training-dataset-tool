@@ -14,6 +14,7 @@ class SharedData(QObject):
 
     def __init__(self):
         QObject.__init__(self)
+
         self.video_path = None
         self.video_sync = 'HH:SS:MM:zzz'
 
@@ -25,6 +26,8 @@ class SharedData(QObject):
         self.moves = None
 
         self.tags = dict()
+
+        self.output_dir = None
 
         self.update_tags.connect(self.update_tags_action)
 
