@@ -1,11 +1,11 @@
-"""
-
+"""This module provide the class and functions needed to handle the data used to generate a dataset for activity
+recognition.
 """
 
 import csv
 from datetime import datetime
 from datetime import timedelta
-from time import mktime
+
 
 class TimecodePresentError(Exception):
     def __init__(self, message):
@@ -13,6 +13,7 @@ class TimecodePresentError(Exception):
 
     def __str__(self):
         return repr(self.message)
+
 
 class TooFewColumnInFile(Exception):
     def __init__(self, message):
@@ -61,7 +62,7 @@ def import_unified_file(path_to_file: str) -> dict:
     """
     # Test if the given parameters have the right type
     if type(path_to_file) is not str:
-        raise TypeError('The "path_to_file" must be a string')
+        raise TypeError('The "path_to_file" must be a string', type(path_to_file))
 
     # Define the function variable
     parameter_dict = {}
@@ -89,6 +90,16 @@ def import_unified_file(path_to_file: str) -> dict:
         # Add the default dictionaries if not present in the imported CSV file
         if 'TIMECODE' not in parameter_dict.keys():
             parameter_dict['TIMECODE'] = []
+        elif len(parameter_dict['TIMECODE']) != 0:
+            if parameter_dict['TIMECODE'][0].isnumeric():
+                for value in parameter_dict['TIMECODE']:
+                    value = datetime.utcfromtimestamp(float(value))
+            else:
+                for value in parameter_dict['TIMECODE']:
+                    temp_value = value.split(':')
+                    value = datetime(1970, 1, 1, int(temp_value[0]), int(temp_value[1]), int(temp_value[2]),
+                                     int(temp_value[3])*1000)
+
         if 'TAG' not in parameter_dict.keys():
             parameter_dict['TAG'] = []
 
@@ -142,6 +153,5 @@ def generate_timecodes(parameter_dict: dict, sampling_rate: int, force=False) ->
         timecode = datetime(1970, 1, 1, 0, 0, 0, 0)
         delta = timedelta(microseconds=(1 / sampling_rate) * 1000000)
         for i in range(amount):
-            parameter_dict['TIMECODE'].append(
-                timecode.strftime('%H:%M:%S:') + str(int(timecode.microsecond / 1000)))
+            parameter_dict['TIMECODE'].append(timecode)
             timecode = timecode + delta

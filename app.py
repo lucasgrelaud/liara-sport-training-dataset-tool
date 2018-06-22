@@ -3,11 +3,21 @@ import os
 
 import data_handling
 
-def main(argv):
-    script_dir = os.path.dirname(os.path.realpath(__file__))
-    data = data_handling.import_unified_file(script_dir + os.path.sep + 'demo_data' + os.path.sep + 'dataset_without_timecode_and_tag.csv')
-    data_handling.generate_timecodes(data, 50)
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtGui import QIcon
 
+from gui.ApplicationWindow import ApplicationWindow
+
+
+def main(argv):
+    application = QApplication(argv)
+
+    application_window = ApplicationWindow()
+    script_dir = os.path.dirname(os.path.realpath(__file__))
+    application_window.setWindowIcon(QIcon(script_dir + os.path.sep + 'logo.jpg'))
+
+    application.setActiveWindow(application_window)
+    sys.exit(application.exec_())
 
 if __name__ == '__main__':
     main(sys.argv)
