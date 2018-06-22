@@ -128,7 +128,11 @@ class VideoPlayerWidget(QWidget):
         file_dialog.setDirectory(QStandardPaths.standardLocations(QStandardPaths.MoviesLocation)[0])
         if file_dialog.exec() == QDialog.Accepted:
             self.shared_data.video_path = file_dialog.selectedUrls()[0]
-            self.load_video(file_dialog.selectedUrls()[0])
+            try:
+                self.load_video(file_dialog.selectedUrls()[0])
+                self.__open_video_button.setEnabled(False)
+            except TypeError:
+                pass
 
     def load_video(self, url):
         self.__media_player.setMedia(QMediaContent(url))
@@ -206,7 +210,7 @@ class VideoPlayerWidget(QWidget):
         self.__video_item.setScale(scale)
 
     def handle_error(self, error):
-        self.error.emit(error[0])
+        pass
 
     def current_timecode(self):
         return self.__time_code.text().split(' ')[0]

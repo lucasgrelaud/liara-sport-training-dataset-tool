@@ -101,7 +101,7 @@ def import_unified_file(path_to_file: str) -> dict:
                                      int(temp_value[3])*1000)
 
         if 'TAG' not in parameter_dict.keys():
-            parameter_dict['TAG'] = []
+            parameter_dict['TAG'] = [''] * len(parameter_dict[list(parameter_dict.keys() - {'TIMECODE', 'TAG'})[0]])
 
     return parameter_dict
 

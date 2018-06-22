@@ -150,6 +150,7 @@ class DataWidget(QWidget):
             # Enable the controls
             self.sync_time_edit.setEnabled(True)
             self.sync_time_button.setEnabled(True)
+            self.dir_picker_button.setEnabled(False)
         self.update_views()
 
     def update_views(self):
@@ -181,7 +182,7 @@ class DataWidget(QWidget):
 
     def restore_state(self):
         if self.shared_data.data_file_path is not None:
-            self.load_files()
+            self.load_files('ACC_X', 'ACC_Y', 'ACC_Z')
         if self.shared_data.data_sync is not None:
             text_time = self.shared_data.data_sync.split(':')
             time = QTime()

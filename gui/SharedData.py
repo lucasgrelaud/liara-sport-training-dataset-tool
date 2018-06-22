@@ -29,11 +29,13 @@ class SharedData(QObject):
         # Attributes dedicated to the data
         self.parameter = None
         self.sampling_rate = None
+        self.parameter_export_list = None
 
         self.update_tags.connect(self.update_tags_action)
 
     def import_parameter(self):
         self.parameter = import_unified_file(self.data_file_path.path())
+        self.parameter_export_list = sorted(self.parameter.keys() - {'TIMECODE', 'TAG'})
 
     def add_timecode(self):
         try:
@@ -42,7 +44,6 @@ class SharedData(QObject):
             pass
 
     def update_tags_action(self, action, timecode, tag):
-        # TODO: Edit this function
         tag_index = self.nearest_ind(self.parameter['TIMECODE'], timecode)
         local_action = action
         local_tag = tag
