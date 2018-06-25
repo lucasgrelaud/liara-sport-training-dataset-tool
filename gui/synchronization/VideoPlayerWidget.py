@@ -128,19 +128,17 @@ class VideoPlayerWidget(QWidget):
         file_dialog.setDirectory(QStandardPaths.standardLocations(QStandardPaths.MoviesLocation)[0])
         if file_dialog.exec() == QDialog.Accepted:
             self.shared_data.video_path = file_dialog.selectedUrls()[0]
-            try:
-                self.load_video(file_dialog.selectedUrls()[0])
-                self.__open_video_button.setEnabled(False)
-            except TypeError:
-                pass
+            self.load_video(file_dialog.selectedUrls()[0])
 
     def load_video(self, url):
         self.__media_player.setMedia(QMediaContent(url))
+        # TODO : add load validation
         self.__play_button.setEnabled(True)
         self.__stop_button.setEnabled(True)
         self.__rotate_left_button.setEnabled(True)
         self.__rotate_right_button.setEnabled(True)
         self.__size_slider.setEnabled(True)
+        self.__open_video_button.setEnabled(False)
         self.__update_time_code(0)
         self.file_loaded.emit()
 

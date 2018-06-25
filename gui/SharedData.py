@@ -13,6 +13,8 @@ class SharedData(QObject):
     update_sync = pyqtSignal()
     update_tags = pyqtSignal(str, datetime, str)
     tags_updated = pyqtSignal(str, str, str)
+    update_export_list = pyqtSignal(str, bool)
+    export_list_updated = pyqtSignal()
 
     def __init__(self):
         QObject.__init__(self)
@@ -32,6 +34,7 @@ class SharedData(QObject):
         self.parameter_export_list = None
 
         self.update_tags.connect(self.update_tags_action)
+        self.update_export_list.connect(self.update_export_list_action)
 
     def import_parameter(self):
         self.parameter = import_unified_file(self.data_file_path.path())
@@ -61,3 +64,14 @@ class SharedData(QObject):
     def nearest_ind(self, items, pivot):
         time_diff = abs([date - pivot for date in items])
         return time_diff.argmin(0)
+
+    def update_export_list_action(self, parameter, state):
+        if self.parameter_export_list is not None:
+            if state is True:
+                self.parameter_export_list.append(parameter)
+                self.parameter_export_list = sorted(self.parameter_export_list)
+            else:
+                self.parameter_export_list.remove(parameter)
+                self.parameter_export_list = sorted(self.parameter_export_list)
+                # self.parameter_export_list = sorted(filter(lambda x: x != parameter, self.parameter_export_list))
+            self.export_list_updated.emit()

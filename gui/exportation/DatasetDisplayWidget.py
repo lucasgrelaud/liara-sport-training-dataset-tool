@@ -27,9 +27,9 @@ class DatasetDisplayWidget(QWidget):
         self.dataset_table.setSelectionMode(QAbstractItemView.SingleSelection)
         self.dataset_table.setShowGrid(True)
 
+
         self.set_columns()
         self.set_row()
-
 
         main_layout = QVBoxLayout()
         main_layout.addWidget(self.dataset_label)
@@ -37,6 +37,8 @@ class DatasetDisplayWidget(QWidget):
         main_layout.addStretch(1)
 
         self.setLayout(main_layout)
+
+        self.shared_data.export_list_updated.connect(self.update_table)
 
     def set_columns(self):
         self.dataset_table.setColumnCount(1)
@@ -50,7 +52,6 @@ class DatasetDisplayWidget(QWidget):
 
     def set_row(self):
         if self.shared_data.parameter_export_list is not None:
-            # TODO: change the .keys() to ['TIMECODE']
             amount = len(self.shared_data.parameter['TIMECODE'])
             if amount > 100:
                 amount = 100
@@ -62,9 +63,12 @@ class DatasetDisplayWidget(QWidget):
             for i in range(amount):
                 self.dataset_table.setRowCount(self.dataset_table.rowCount() + 1)
                 for y in range(len(parameter_list)):
-                    print(self.shared_data.parameter[parameter_list[y]][i])
                     value = self.shared_data.parameter[parameter_list[y]][i]
                     if type(value) is datetime:
                         value = value.strftime('%H:%M:%S:') + str(int(value.microsecond / 1000))
 
                     self.dataset_table.setItem(i, y, QTableWidgetItem(value))
+
+    def update_table(self):
+        self.set_columns()
+        self.set_row()
