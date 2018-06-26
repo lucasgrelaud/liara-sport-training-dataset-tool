@@ -4,7 +4,6 @@ from PyQt5.QtWidgets import QSlider
 
 
 class QToggleSwitch(QSlider):
-
     toggled = pyqtSignal()
     switchedOn = pyqtSignal(str)
     switchedOff = pyqtSignal(str)
@@ -18,22 +17,22 @@ class QToggleSwitch(QSlider):
         self.setSliderPosition(default)
 
         self.sliderReleased.connect(self.toggle)
-        self.label = label
-        self.last_value = self.value()
+        self.__label = label
+        self.__last_value = self.value()
 
     def toggle(self):
         if self.value() == 0:
 
-            if self.last_value != 0:
+            if self.__last_value != 0:
                 self.toggled.emit()
-                self.switchedOff.emit(self.label)
-                self.last_value = 0
+                self.switchedOff.emit(self.__label)
+                self.__last_value = 0
 
         else:
-            if self.last_value != 1:
+            if self.__last_value != 1:
                 self.toggled.emit()
-                self.switchedOn.emit(self.label)
-                self.last_value = 1
+                self.switchedOn.emit(self.__label)
+                self.__last_value = 1
 
     def isOn(self):
         if self.currentValue == 1:
