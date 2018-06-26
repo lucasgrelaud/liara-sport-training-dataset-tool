@@ -1,29 +1,25 @@
-from PyQt5.QtCore import Qt
 from PyQt5.QtCore import QStandardPaths
 from PyQt5.QtCore import QTime
+from PyQt5.QtCore import Qt
 from PyQt5.QtCore import pyqtSignal
-
 from PyQt5.QtGui import QTransform
-
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtMultimedia import QMediaContent
+from PyQt5.QtMultimedia import QMediaPlayer
+from PyQt5.QtMultimediaWidgets import QGraphicsVideoItem
+from PyQt5.QtWidgets import QDialog
+from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtWidgets import QGraphicsScene
 from PyQt5.QtWidgets import QGraphicsView
+from PyQt5.QtWidgets import QHBoxLayout
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtWidgets import QSlider
-from PyQt5.QtWidgets import QDialog
-from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtWidgets import QStyle
-from PyQt5.QtWidgets import QHBoxLayout
 from PyQt5.QtWidgets import QVBoxLayout
-
-from PyQt5.QtMultimedia import QMediaPlayer
-from PyQt5.QtMultimedia import QMediaContent
-from PyQt5.QtMultimediaWidgets import QGraphicsVideoItem
+from PyQt5.QtWidgets import QWidget
 
 
 class VideoPlayerWidget(QWidget):
-
     error = pyqtSignal(str)
     file_loaded = pyqtSignal()
 
@@ -45,7 +41,7 @@ class VideoPlayerWidget(QWidget):
         self.__size_label.setText('Set size : ')
 
         self.__size_slider = QSlider(Qt.Horizontal)
-        self.__size_slider.setRange(50,150)
+        self.__size_slider.setRange(50, 150)
         self.__size_slider.setValue(100)
         self.__size_slider.setFixedWidth(150)
         self.__size_slider.setEnabled(False)
@@ -115,7 +111,6 @@ class VideoPlayerWidget(QWidget):
         self.__media_player.stateChanged.connect(self.__media_state_changed)
         self.__media_player.positionChanged.connect(self.__position_changed)
         self.__media_player.durationChanged.connect(self.__duration_changed)
-        self.__media_player.error.connect(self.handle_error)
 
         # Set the widget layout
         self.setLayout(widget_layout)
@@ -206,9 +201,6 @@ class VideoPlayerWidget(QWidget):
     def __set_size(self, percent):
         scale = percent / 100
         self.__video_item.setScale(scale)
-
-    def handle_error(self, error):
-        pass
 
     def current_timecode(self):
         return self.__time_code.text().split(' ')[0]
