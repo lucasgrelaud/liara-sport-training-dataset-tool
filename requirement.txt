@@ -1,3 +1,7 @@
 numpy
+
 pyqt5
+
 pyqtgraph
+
+ruamel.yaml

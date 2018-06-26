@@ -11,6 +11,7 @@ from PyQt5.QtWidgets import QMessageBox
 
 
 from data_handling import export_dataset
+from data_handling import export_dataset_separated_files
 
 class ExportActionWidget(QWidget):
 
@@ -34,6 +35,7 @@ class ExportActionWidget(QWidget):
         # Create the export buttons
         self.export_separated_button = QPushButton()
         self.export_separated_button.setText('Export to separated files')
+        self.export_separated_button.clicked.connect(self.export_dataset_separated_files_action)
         self.export_separated_button.setEnabled(False)
 
         self.export_dataset_button = QPushButton()
@@ -64,9 +66,16 @@ class ExportActionWidget(QWidget):
         self.shared_data.output_dir = QFileDialog.getExistingDirectory(self, 'Open the output directory', QDir.homePath())
         self.dir_picker_path.setText(self.shared_data.output_dir)
         self.export_dataset_button.setEnabled(True)
+        self.export_separated_button.setEnabled(True)
 
     def export_dataset_action(self):
         export_dataset(self.shared_data.parameter, self.shared_data.parameter_export_list, self.shared_data.output_dir)
         QMessageBox.information(self, 'Dataset exported',
                                 'The dataset has been exported and is accessible in the selected directory')
 
+    def export_dataset_separated_files_action(self):
+        export_dataset_separated_files(self.shared_data.parameter, self.shared_data.parameter_export_list,
+                                       self.shared_data.output_dir)
+        QMessageBox.information(self, 'Dataset exported',
+                                'The dataset has been exported as separated files, which are '
+                                'accessible in the selected directory')
