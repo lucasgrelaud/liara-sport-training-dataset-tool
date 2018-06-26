@@ -9,6 +9,7 @@ from data_handling import import_unified_file
 from data_handling import generate_timecodes
 from data_handling import TimecodePresentError
 
+
 class SharedData(QObject):
     update_sync = pyqtSignal()
     update_tags = pyqtSignal(str, datetime, str)

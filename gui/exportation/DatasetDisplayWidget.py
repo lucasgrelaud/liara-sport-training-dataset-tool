@@ -26,7 +26,7 @@ class DatasetDisplayWidget(QWidget):
         self.dataset_table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.dataset_table.setSelectionMode(QAbstractItemView.SingleSelection)
         self.dataset_table.setShowGrid(True)
-
+        self.dataset_table.setMinimumHeight(600)
 
         self.set_columns()
         self.set_row()
@@ -70,5 +70,6 @@ class DatasetDisplayWidget(QWidget):
                     self.dataset_table.setItem(i, y, QTableWidgetItem(value))
 
     def update_table(self):
+        self.dataset_table.clear()
         self.set_columns()
         self.set_row()

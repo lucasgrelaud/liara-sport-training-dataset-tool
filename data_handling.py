@@ -1,8 +1,9 @@
 """This module provide the class and functions needed to handle the data used to generate a dataset for activity
 recognition.
 """
-
+import os
 import csv
+
 from datetime import datetime
 from datetime import timedelta
 
@@ -155,3 +156,31 @@ def generate_timecodes(parameter_dict: dict, sampling_rate: int, force=False) ->
         for i in range(amount):
             parameter_dict['TIMECODE'].append(timecode)
             timecode = timecode + delta
+
+
+def export_dataset(parameter_dict: dict, selected_parameter: list, output_dir: str):
+    # Test if the given parameters have the right type
+    if type(parameter_dict) is not dict:
+        raise TypeError('The "parameter_dict" must be a dictionary', type(parameter_dict))
+    if type(selected_parameter) is not list:
+        raise TypeError('The "selected_parameter" must be a list', type(selected_parameter))
+    if type(output_dir) is not str:
+        raise TypeError('The "output_dir" must be a string', type(output_dir))
+
+    # Generate the dataset file
+    parameter_list = ['TIMECODE']
+    parameter_list.extend(selected_parameter)
+    parameter_list.append('TAG')
+
+    with open(output_dir + os.path.sep + 'dataset.csv', 'w', newline='') as output_file:
+        writer = csv.DictWriter(output_file, fieldnames=parameter_list, dialect='excel')
+
+        writer.writeheader()
+        for i in range(len(parameter_dict['TIMECODE'])):
+            temp_dict = {}
+            for parameter in parameter_list:
+                value = parameter_dict[parameter][i]
+                if type(value) is datetime:
+                    value = value.strftime('%H:%M:%S:') + str(int(value.microsecond / 1000))
+                temp_dict[parameter] = value
+            writer.writerow(temp_dict)
