@@ -111,17 +111,19 @@ class DataWidget(QWidget):
                                                                        QDir.homePath())[0]
         if self.__shared_data.data_file_path is not None:
             try:
-                self.__load_files('ACC_X', 'ACC_Y', 'ACC_Z')
+                self.__load_data()
+                self.__show_data('ACC_X', 'ACC_Y', 'ACC_Z')
             except FileNotFoundError:
                 pass
             except UnicodeDecodeError:
                 pass
 
-    def __load_files(self, field1, field2, field3):
+    def __load_data(self):
         if self.__shared_data.data_file_path is not None:
-            # Import the parameters from the file
             self.__shared_data.import_parameter()
 
+    def __show_data(self, field1, field2, field3):
+        if self.__shared_data.data_file_path is not None:
             # Generate the timecodes if needed
             if len(self.__shared_data.parameter['TIMECODE']) == 0:
                 if self.__shared_data.sampling_rate is None:
@@ -179,8 +181,9 @@ class DataWidget(QWidget):
         return result
 
     def __restore_state(self):
-        if self.__shared_data.data_file_path is not None:
-            self.__load_files('ACC_X', 'ACC_Y', 'ACC_Z')
+        if self.__shared_data.parameter is not None:
+            self.__show_data('ACC_X', 'ACC_Y', 'ACC_Z')
+            print('trigger reimport')
         if self.__shared_data.data_sync is not None:
             text_time = self.__shared_data.data_sync.split(':')
             time = QTime()

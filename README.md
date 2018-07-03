@@ -84,7 +84,7 @@ Advanced example are also available in the [demo_data](demo_data) directory.
  * **Lucas GRELAUD** - _LIARA Intern (2018)_ - [Github](https://github.com/lucasgrelaud)
  
 ## License
-This project is licensed under the GNU GPL v3.3 - see the [LICENSE][license] file for details.
+This project is licensed under the GNU GPL v3.3 - see the [LICENSE][gnu-license] file for details.
 
 [screenshoot-img]: screenshoot.png
 [language-img]:https://img.shields.io/badge/languages-En-green.svg?style=flat-square

@@ -74,5 +74,4 @@ class SharedData(QObject):
             else:
                 self.parameter_export_list.remove(parameter)
                 self.parameter_export_list = sorted(self.parameter_export_list)
-                # self.parameter_export_list = sorted(filter(lambda x: x != parameter, self.parameter_export_list))
             self.export_list_updated.emit()

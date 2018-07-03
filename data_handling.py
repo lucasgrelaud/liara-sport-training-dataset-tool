@@ -238,13 +238,13 @@ def export_dataset_separated_files(parameter_dict: dict, selected_parameter: lis
     # Write th files
     for parameter in selected_parameter:
         with open(output_dir + os.path.sep + parameter + '.csv', 'w', newline='') as output_file:
-            list = ['TIMECODE', parameter, 'TAG']
-            writer = csv.DictWriter(output_file, fieldnames=list, dialect='excel')
+            local_list = ['TIMECODE', parameter, 'TAG']
+            writer = csv.DictWriter(output_file, fieldnames=local_list, dialect='excel')
 
             writer.writeheader()
             for i in range(len(parameter_dict['TIMECODE'])):
                 temp_dict = {}
-                for value in list:
+                for value in local_list:
                     value = parameter_dict.get(parameter)[i]
                     if type(value) is datetime:
                         value = value.strftime('%H:%M:%S:') + str(int(value.microsecond / 1000))

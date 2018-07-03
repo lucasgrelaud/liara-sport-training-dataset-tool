@@ -106,6 +106,9 @@ class SideBarWidget(QWidget):
             for i in range(len(self.__shared_data.parameter['TAG'])):
                 tag = self.__shared_data.parameter['TAG'][i]
                 if tag != '':
-                    self.__tags_table.setItem(self.tags_table.rowCount() - 1, 0, QTableWidgetItem(self.__shared_data.parameter['TIMECODE'][i]))
-                    self.__tags_table.setItem(self.tags_table.rowCount() - 1, 1, QTableWidgetItem(tag))
-                    self.__tags_table.insertRow(self.tags_table.rowCount())
+                    self.__tags_table.setItem(self.__tags_table.rowCount() - 1, 0, QTableWidgetItem(
+                        self.__shared_data.parameter['TIMECODE'][i].strftime('%H:%M:%S:') +
+                        str(int(self.__shared_data.parameter['TIMECODE'][i].microsecond / 1000))
+                    ))
+                    self.__tags_table.setItem(self.__tags_table.rowCount() - 1, 1, QTableWidgetItem(tag))
+                    self.__tags_table.insertRow(self.__tags_table.rowCount())
