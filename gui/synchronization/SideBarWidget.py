@@ -101,7 +101,6 @@ class SideBarWidget(QWidget):
         if self.__shared_data.video_sync is not None or self.__shared_data.data_sync is not None:
             self.__update_sync_value()
 
-        # TODO: fix this method
         if self.__shared_data.parameter is not None:
             for i in range(len(self.__shared_data.parameter['TAG'])):
                 tag = self.__shared_data.parameter['TAG'][i]
@@ -112,3 +111,4 @@ class SideBarWidget(QWidget):
                     ))
                     self.__tags_table.setItem(self.__tags_table.rowCount() - 1, 1, QTableWidgetItem(tag))
                     self.__tags_table.insertRow(self.__tags_table.rowCount())
+            self.__tags_delete_button.setEnabled(True)

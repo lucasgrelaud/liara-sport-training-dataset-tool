@@ -88,10 +88,6 @@ class DataWidget(QWidget):
         self.__y_axis_viewbox.setXLink(self.__plot_item_viewbox)
         self.__z_axis_viewbox.setXLink(self.__plot_item_viewbox)
 
-        self.__x_axis_item.setLabel('ACC_X', color="#34495e")
-        self.__y_axis_item.setLabel('ACC_Y', color="#9b59b6")
-        self.__z_axis_item.setLabel('ACC_Z', color="#3498db")
-
         self.__plot_item_viewbox.sigResized.connect(self.__update_views)
         self.__x_axis_viewbox.enableAutoRange(axis=ViewBox.XAxis, enable=True)
         self.__y_axis_viewbox.enableAutoRange(axis=ViewBox.XAxis, enable=True)
@@ -112,6 +108,7 @@ class DataWidget(QWidget):
         if self.__shared_data.data_file_path is not None:
             try:
                 self.__load_data()
+                self.__add_selector_acc_gyr()
                 self.__show_data('ACC_X', 'ACC_Y', 'ACC_Z')
             except FileNotFoundError:
                 pass
@@ -123,7 +120,7 @@ class DataWidget(QWidget):
             self.__shared_data.import_parameter()
 
     def __show_data(self, field1, field2, field3):
-        if self.__shared_data.data_file_path is not None:
+        if self.__shared_data.parameter is not None:
             # Generate the timecodes if needed
             if len(self.__shared_data.parameter['TIMECODE']) == 0:
                 if self.__shared_data.sampling_rate is None:
@@ -133,6 +130,10 @@ class DataWidget(QWidget):
 
                 self.__shared_data.add_timecode()
 
+            self.__x_axis_viewbox.clear()
+            self.__y_axis_viewbox.clear()
+            self.__z_axis_viewbox.clear()
+
             # Show the 3 selected fields
             self.__x_axis_viewbox.addItem(PlotCurveItem(list(map(int, self.__shared_data.parameter.get(field1))),
                                                         pen='#34495e'))
@@ -140,6 +141,11 @@ class DataWidget(QWidget):
                                                         pen='#9b59b6'))
             self.__z_axis_viewbox.addItem(PlotCurveItem(list(map(int, self.__shared_data.parameter.get(field3))),
                                                         pen='#3498db'))
+
+            self.__x_axis_item.setLabel(field1, color="#34495e")
+            self.__y_axis_item.setLabel(field2, color="#9b59b6")
+            self.__z_axis_item.setLabel(field3, color="#3498db")
+
             # Add the middle line and the bottom timecodes
             timecodes = self.__shared_data.parameter['TIMECODE']
             middle = [0] * len(timecodes)
@@ -180,8 +186,33 @@ class DataWidget(QWidget):
         self.__shared_data.sampling_rate, result = QInputDialog.getInt(self, 'Set sampling rate value', 'Sampling rate')
         return result
 
+    def __add_selector_acc_gyr(self):
+        if 'GYR_X' in self.__shared_data.parameter.keys() or 'GYR_Y' in self.__shared_data.parameter.keys() \
+                or 'GYR_Z' in self.__shared_data.parameter.keys():
+            show_acc = QPushButton()
+            show_acc.setText('Show Accelerometer Axis')
+            show_acc.clicked.connect(self.__show_acc)
+
+            show_gyr = QPushButton()
+            show_gyr.setText('Show Gyroscope Axis')
+            show_gyr.clicked.connect(self.__show_gyr)
+
+            layout = QHBoxLayout()
+            layout.addWidget(show_acc)
+            layout.addWidget(show_gyr)
+            layout.addStretch(1)
+
+            self.__v_box.addLayout(layout)
+
+    def __show_acc(self):
+        self.__show_data('ACC_X', 'ACC_Y', 'ACC_Z')
+
+    def __show_gyr(self):
+        self.__show_data('GYR_X', 'GYR_Y', 'GYR_Z')
+
     def __restore_state(self):
         if self.__shared_data.parameter is not None:
+            self.__add_selector_acc_gyr()
             self.__show_data('ACC_X', 'ACC_Y', 'ACC_Z')
             print('trigger reimport')
         if self.__shared_data.data_sync is not None:
