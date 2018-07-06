@@ -12,10 +12,10 @@ class ApplicationWindow(QMainWindow):
         self.shared_data = SharedData()
 
         self.title = 'Training Dataset Creation Tool'
-        self.left = 0
-        self.top = 0
-        self.width = 1600
-        self.height = 1200
+        self.left = 10
+        self.top = 10
+        self.width = 1280
+        self.height = 720
         self.initUI()
 
     def initUI(self):
