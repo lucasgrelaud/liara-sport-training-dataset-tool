@@ -125,7 +125,7 @@ class DataWidget(QWidget):
             if len(self.__shared_data.parameter['TIMECODE']) == 0:
                 if self.__shared_data.sampling_rate is None:
                     result = False
-                    while not result:
+                    while not result and result == 0:
                         result = self.__show_sampling_rate_picker()
 
                 self.__shared_data.add_timecode()
@@ -167,7 +167,7 @@ class DataWidget(QWidget):
     def __generate_time_ticks(self, timecodes, rate):
         ticks = list()
 
-        steps = [rate * 30, rate * 15, rate]
+        steps = [rate * 30, rate * 15, rate * 5, rate]
         for step in steps:
             temp = list()
             i = step
